@@ -39,6 +39,8 @@ sudo apt install tree #AB A fancy directory structure printer
 #AB VERY IMPORTANT NOTE: We used to use snap to install CloudComp-are and Blender, but snap bundled packages incompatible with our graphics drivers and everything crashed. Use apt instead. It's safer.
 sudo apt install cloudcompare #AB Install CloudCompare (a point-cloud processing software)
 sudo apt install blender #AB Install blender (a 3D modeling software)
+sudo apt install gparted # A partition manager
+sudo apt install dosfstools mtools # Dependencies for gparted on the previous line which let it work with FAT32 formatting
 
 
 echo -e "\e[38;5;82mInstalling VS Code, Firefox, CloudCompare, and Blender via snap...\033[0m"
