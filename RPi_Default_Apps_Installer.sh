@@ -13,12 +13,11 @@ sudo apt update
 sudo apt upgrade
 sudo apt autoremove
 
-sudo apt install network-manager #AB add utility for managing networks
-sudo apt install net-tools #AB add another utility for managing networks
-sudo apt-get install git #AB install git, just in case it is not already installed
-sudo apt install yamllint #AB a tool to check the syntax of YAML files
-sudo apt install sl #AB Install sl, an alias for ls
-
+sudo apt install -y network-manager #AB add utility for managing networks
+sudo apt install -y net-tools #AB add another utility for managing networks
+sudo apt-get install -y git #AB install git, just in case it is not already installed
+sudo apt install -y yamllint #AB a tool to check the syntax of YAML files
+sudo apt install -y sl #AB Install sl, an alias for ls
 
 
 #---------------------------------------------INSTALL INGENIUM CARTOGRAPHER REPOSITORY---------------------------------------------
@@ -63,8 +62,8 @@ done
 
 sudo apt-get update
 sudo apt-get upgrade
-sudo apt-get install ros-jazzy-velodyne #AB Install the IMU driver. It's in a stack hosted (I believe) on the ROS website.
-sudo apt-get install ros-jazzy-microstrain-inertial-driver #AB Install the IMU driver. Turns out that the these drivers are now maintained as part of a built-in ROS package manager! This should make things easier for future updates.
+sudo apt-get install -y ros-jazzy-velodyne #AB Install the IMU driver. It's in a stack hosted (I believe) on the ROS website.
+sudo apt-get install -y ros-jazzy-microstrain-inertial-driver #AB Install the IMU driver. Turns out that the these drivers are now maintained as part of a built-in ROS package manager! This should make things easier for future updates.
 
 
 

@@ -24,28 +24,27 @@ echo -e "\e[38;5;82mUpdating and upgrading apt repositories..."
 sudo apt update
 sudo apt upgrade
 echo -e "\e[38;5;82mInstalling htop, openssh, gnome-keyring, rpi-imager, gnome-tweaks, snapd, yamllint, gdm-toolkit, net-tools, pip, python3.12-venv, sl, tree, cloudcompare, blender, gparted, dosfstools, mtools, and vim via apt...\033[0m"
-sudo apt install htop #AB Disk space monitor
-sudo apt install openssh-server #AB SSH client
-sudo apt-get install gnome-keyring #AB Install a secure cryptographic library needed by VS Code
-sudo apt install rpi-imager #AB a software for burning OSes onto SD cards for use in a Raspberry Pi
-sudo apt install gnome-tweaks #AB An OS customization tool
-sudo apt install snapd #AB A package manager
-sudo apt install yamllint #AB a tool to check the syntax of YAML files
-sudo apt install gdm-settings libglib2.0-dev-bin #AB Another OS customization tool
-sudo apt install net-tools
-sudo apt install python3-pip #AB Install pip, Python's package manager.
-sudo apt install python3.12-venv #AB Install a package to allow creating python virtual environments
-sudo apt install sl #AB Install sl, an alias for ls
-sudo apt install tree #AB A fancy directory structure printer
+sudo apt install -y htop #AB Disk space monitor
+sudo apt install -y openssh-server #AB SSH client
+sudo apt-get install -y gnome-keyring #AB Install a secure cryptographic library needed by VS Code
+sudo apt install -y rpi-imager #AB a software for burning OSes onto SD cards for use in a Raspberry Pi
+sudo apt install -y gnome-tweaks #AB An OS customization tool
+sudo apt install -y snapd #AB A package manager
+sudo apt install -y yamllint #AB a tool to check the syntax of YAML files
+sudo apt install -y gdm-settings libglib2.0-dev-bin #AB Another OS customization tool
+sudo apt install -y net-tools
+sudo apt install -y python3-pip #AB Install pip, Python's package manager.
+sudo apt install -y python3.12-venv #AB Install a package to allow creating python virtual environments
+sudo apt install -y sl #AB Install sl, an alias for ls
+sudo apt install -y tree #AB A fancy directory structure printer
 #AB VERY IMPORTANT NOTE: We used to use snap to install CloudCompare and Blender, but snap bundled packages incompatible with our graphics drivers and everything crashed. Use apt instead. It's safer.
-sudo apt install cloudcompare #AB Install CloudCompare (a point-cloud processing software)
-sudo apt install blender #AB Install Blender (a 3D modeling software)
-sudo apt install gparted #AB A partition manager
-sudo apt install dosfstools mtools #AB Install dependencies for gparted on the previous line which let it work with FAT32 formatting
-sudo apt install vim #AB Install vim, _the_ standard text editor for Terminal (if not the most user friendly)
-
+sudo apt install -y cloudcompare #AB Install CloudCompare (a point-cloud processing software)
+sudo apt install -y blender #AB Install Blender (a 3D modeling software)
+sudo apt install -y gparted #AB A partition manager
+sudo apt install -y dosfstools mtools #AB Install dependencies for gparted on the previous line which let it work with FAT32 formatting
+sudo apt install -y vim #AB Install vim, _the_ standard text editor for Terminal (if not the most user friendly)
 echo -e "\e[38;5;82mInstalling and configuring git...\033[0m"
-sudo apt-get install git #AB Install and then configure git (a source control software for coders)
+sudo apt-get install -y git #AB Install and then configure git (a source control software for coders)
 git config --global user.email "ingenium.lidar@outlook.com"
 git config --global user.name "Ingenium-LiDAR"
 

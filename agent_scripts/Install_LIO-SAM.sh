@@ -10,8 +10,8 @@ sudo apt autoremove
 
 # Add Docker's official GPG key:
 sudo apt-get update
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
+sudo apt-get install -y ca-certificates curl
+sudo apt install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 
@@ -24,7 +24,7 @@ sudo apt-get update
 
 
 curl "https://desktop.docker.com/linux/main/amd64/docker-desktop-amd64.deb" --output docker-desktop-amd64.deb
-sudo apt-get install ./docker-desktop-amd64.deb #AB Install Docker Desktop. This is required to run LIO-SAM.
+sudo apt-get -y install ./docker-desktop-amd64.deb #AB Install Docker Desktop. This is required to run LIO-SAM.
 
 
 
