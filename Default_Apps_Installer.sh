@@ -175,8 +175,7 @@ cd $CURRENT_DIRECTORY #AB return to the directory the script was in before insta
 # INSTALL THE GITHUB THAT IS A DEPENDENCY OF THE MAIN SLAM GITHUB
 cd ~
 sudo apt install python3-colcon-common-extensions
-#FK source the version of ros
-source /opt/ros/jazzy/setup.bash
+source /opt/ros/jazzy/setup.bash #FK source the version of ros
 mkdir -p ~/Apps/ros2_ws/src
 echo -e "\e[38;5;5m If you got a 'fatal' error saying ros2_ws already exists, do not worry. Everything is OK. \033[0m"
 
@@ -185,11 +184,9 @@ git clone https://github.com/rsasaki0109/ndt_omp_ros2.git -b humble
 cd ndt_omp_ros2
 colcon build --executor sequential --cmake-clean-first
 echo -e "\e[38;5;5m If you got depreciation warnings and such, but nothing labeled 'error' or something else really serious, do not worry. Everything is OK. \033[0m"
-#FK source the ros setup script for this application specifically
-source ~/Apps/ros2_ws/src/ndt_omp_ros2/install/setup.bash
+source ~/Apps/ros2_ws/src/ndt_omp_ros2/install/setup.bash #FK source the ros setup script for this application specifically
 
-#FK test it!
-ros2 run ndt_omp_ros2 align data/251370668.pcd data/251371071.pcd
+ros2 run ndt_omp_ros2 align data/251370668.pcd data/251371071.pcd #FK tests it
 
 # INSTALL THE MAIN SLAM GITHUB
 # insert stuff here
