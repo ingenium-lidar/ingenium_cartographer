@@ -39,15 +39,18 @@ sudo apt install tree #AB A fancy directory structure printer
 #AB VERY IMPORTANT NOTE: We used to use snap to install CloudComp-are and Blender, but snap bundled packages incompatible with our graphics drivers and everything crashed. Use apt instead. It's safer.
 sudo apt install cloudcompare #AB Install CloudCompare (a point-cloud processing software)
 sudo apt install blender #AB Install blender (a 3D modeling software)
-sudo apt install gparted # A partition manager
-sudo apt install dosfstools mtools # Dependencies for gparted on the previous line which let it work with FAT32 formatting
+sudo apt install gparted #AB A partition manager
+sudo apt install dosfstools mtools #AB Dependencies for gparted on the previous line which let it work with FAT32 formatting
+sudo apt install vim #AB Install vim, _the_ standard text editor for Terminal (if not the most user friendly)
 
 
 echo -e "\e[38;5;82mInstalling VS Code, Firefox, CloudCompare, and Blender via snap...\033[0m"
 sudo snap install --classic code #AB Visual Studio Code, a git-integrated IDE for basically all computer languages
 sudo snap install firefox
 sudo snap refresh firefox #AB Update the default-installed firefox to the latest version
-sudo snap install gh #AB Install the gh (or GitHub) package
+sudo snap install gh #FK/AB install GitHub command line interface
+sudo snap install emacs #AB Install emacs, for all the people who know that instead of vim
+
 
 echo -e "\e[38;5;82mInstalling and configuring git...\033[0m"
 sudo apt-get install git #AB Install and then configure git (a source control software for coders)
@@ -97,7 +100,7 @@ for file in *; do #AB Iterate through all files within it
     fi
 done
 
-sudo snap install gh #FK install GitHub command line interface
+
 
 gsettings set org.gnome.desktop.background picture-uri file:~/Documents/GitHub/ingenium_cartographer/blanchard.png #AB Set the desktop background to blanchard.png from the GitHub.
 
