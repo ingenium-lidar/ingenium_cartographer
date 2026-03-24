@@ -45,6 +45,7 @@ sudo apt install -y dosfstools mtools #AB Install dependencies for gparted on th
 sudo apt install -y vim #AB Install vim, _the_ standard text editor for Terminal (if not the most user friendly)
 echo -e "\e[38;5;82mInstalling and configuring git...\033[0m"
 sudo apt-get install -y git #AB Install and then configure git (a source control software for coders)
+sudo apt install git-lfs #AB Git Large File Storage, an open source extension to help deal with large files in git commits.
 git config --global user.email "ingenium.lidar@outlook.com"
 git config --global user.name "Ingenium-LiDAR"
 
@@ -63,8 +64,15 @@ code --password-store="gnome-libsecret" #AB (attempt to) configure VS Code to us
 
 echo -e "\e[38;5;82mCreating default directory structure...\033[0m"
 mkdir -p ~/Documents/GitHub
-mkdir -p ~/Documents/Data
+mkdir -p ~/Documents/Github
 mkdir -p ~/Apps/ros2_ws/src
+
+# cd ~/Documents
+# git clone https://github.com/Ingenium-LiDAR/Data.git
+# git lfs install
+# git lfs track "*"
+# git add .gitattributes
+# cd ~
 
 
 
