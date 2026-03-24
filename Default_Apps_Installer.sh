@@ -17,6 +17,8 @@ ethernet=enp152s0  #AB Replace enp152s0 with the name of your ethernet port, whi
 
 
 #---------------------------------------------INSTALL BASIC PACKAGES---------------------------------------------
+
+
 echo -e "\e[38;5;82mInstalling base packages...\033[0m"
 sleep 1
 
@@ -168,13 +170,13 @@ rm veloview.tar.gz #AB delete the archive previously downloaded
 
 
 
-#---------------------------------------------INSTALL ROS2 Jazzy---------------------------------------------
+#---------------------------------------------INSTALL SLAM---------------------------------------------
 
 
 echo -e "\e[38;5;82mInstalling lidarslam_ros2...\033[0m"
 cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the ingenium_cartographer/agent_scripts directory. 
-./Install_SLAM.sh #AB Run the Install_SLAM.sh script to install lidarslam_ros2 
-
+# ./Install_rsasaki_slam.sh #AB Run the Install_rsasaki_slam.sh script to install lidarslam_ros2 
+echo -e "\e[38;5;196m\033[1m DID NOT RUN SLAM INSTALLER. THE RELEVANT LINE OF CODE HAS BEEN COMMENTED UNTIL THE SCRIPT IS COMPLETE \033[0m"
 
 
 #---------------------------------------------CLEANUP---------------------------------------------
