@@ -8,6 +8,7 @@ RED='\033[0;31m' #AB format echo text as red
 NC='\033[0m' #AB format echo text as "no color"
 BOLD_CYAN='\e[1;36m' #AB format echo text as bold cyan
 BOLD='\e[1m' #AB format echo text as bold
+LIME='\e[38;5;82m' #AB format echo text as bright green
 #AB To print all possible colors, uncomment the following lines:
 # for code in {0..255}
 #     do echo -e "\e[38;5;${code}m"'\\e[38;5;'"$code"m"\e[0m"
@@ -19,12 +20,12 @@ ethernet=enp152s0  #AB Replace enp152s0 with the name of your ethernet port, whi
 
 #---------------------------------------------INSTALL BASIC PACKAGES---------------------------------------------
 
-echo -e "\e[38;5;82mUpdating and upgrading apt repositories..."
+echo -e "$LIME Updating and upgrading apt repositories...$NC "
 sudo apt update
 sudo apt upgrade
 sudo apt autoremove
 
-echo -e "\e[38;5;82mInstalling apt packages...\033[0m"
+echo -e "$LIME Installing apt packages...$NC "
 sleep 1
 
 apt_packages=(
@@ -60,13 +61,13 @@ for package in "${apt_packages[@]}"; do
 done
 
 
-echo -e "\e[38;5;82mConfiguring git...\033[0m"
+echo -e "$LIME Configuring git...$NC "
 
 git config --global user.email "ingenium.lidar@outlook.com"
 git config --global user.name "Ingenium-LiDAR"
 
 
-echo -e "\e[38;5;82mInstalling snap packages...\033[0m"
+echo -e "$LIME Installing snap packages...$NC "
 
 snap_packages=(
     firefox #AB Install Firefox Web Browser
@@ -87,10 +88,15 @@ done
 #---------------------------------------------CREATE DEFAULT DIRECTORY STRUCTURE---------------------------------------------
 
 
-echo -e "\e[38;5;82mCreating default directory structure...\033[0m"
-mkdir -p ~/Documents/GitHub
-mkdir -p ~/Apps/ros2_ws/src
-mkdir -p ~/Documents/Data
+echo -e "$LIME Creating default directory structure...$NC "
+
+mkdir ~/Documents
+mkdir ~/Documents/GitHub
+mkdir ~/Documents/Data
+
+mkdir ~/Apps
+mkdir ~/Apps/ros2_ws/src
+
 
 cd ~/Documents #AB Clone the RFCS repository, which contains .md files which document work that needs to be done.
 git clone https://github.com/Ingenium-LiDAR/RFCS.git
@@ -101,20 +107,15 @@ cd ~
 #---------------------------------------------INSTALL "ingenium_cartographer" REPOSITORY---------------------------------------------
 
 
-echo -e "\e[38;5;82mInstalling the Ingenium Cartographer repository...\033[0m"
-if ! [ -d ~/Documents/GitHub/ingenium_cartographer ]; then #AB If a directory called ingenium_cartographer does not already exist in ~/Documents/GitHub...
-    cd ~/Documents/GitHub #AB ...navigate to the ~/Documents/GitHub directory
-    git clone https://github.com/JohannesByle/ingenium_cartographer
-    sleep 2
-    cd ingenium_cartographer #AB Enter the newly cloned repository
-    git switch jazzy #AB Switch to the jazzy branch of the ingenium_cartographer repository
-else
-    cd ingenium_cartographer #AB Else, enter the existing repository
-    git pull #AB Update the repository to the latest version
-    git switch jazzy #AB Switch to the jazzy branch of the ingenium_cartographer repository 
+echo -e "$LIME Installing the Ingenium Cartographer repository...$NC "
+if [ -d ~/Documents/GitHub/ingenium_cartographer ]; then #AB If a directory called ingenium_cartographer already exists in ~/Documents/GitHub...
+    sudo rm -rfd ~/Documents/GitHub/ingenium_cartographer #AB ...then delete it, along with all of its contents.
 fi
 
+cd ~/Documents/GitHub #AB ...navigate to the ~/Documents/GitHub directory
+git clone https://github.com/ingenium-lidar/ingenium_cartographer.git #AB ...and clone the ingenium_cartographer repository from GitHub
 
+cd ingenium_cartographer #AB Navigate to the newly cloned repository
 for file in *; do #AB Iterate through all files within it
     if [[ "$file" == *.sh ]]; then #AB If the file ends in .sh (i.e., if it's a bash script)...
         chmod +x "$file" #AB ...then mark it as executable
@@ -133,7 +134,7 @@ done
 #---------------------------------------------INSTALL ROS2 Jazzy---------------------------------------------
 
 
-echo -e "\e[38;5;82mInstalling ROS2 Jazzy Jalisco...\033[0m"
+echo -e "$LIME Installing ROS2 Jazzy Jalisco...$NC "
 cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the ingenium_cartographer/agent_scripts directory.
 ./Install_Jazzy.sh #AB Run the Install_Jazzy.sh script to install ROS Jazzy 
 
@@ -142,7 +143,8 @@ cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the in
 #---------------------------------------------INSTALL HARDWARE DRIVERS---------------------------------------------
 
 
-echo -e "\e[38;5;82mInstalling hardware drivers...\033[0m"
+echo -e "$LIME Installing hardware drivers...$NC "
+#AB We install these here and not above with the other apt installs because they require ROS Jazzy to be installed first
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get -y install ros-jazzy-velodyne #AB Install the Velodyne driver. It's in a stack hosted (I believe) on the ROS website.
@@ -153,9 +155,8 @@ sudo apt-get -y install ros-jazzy-microstrain-inertial-driver #AB Install the IM
 #---------------------------------------------CONFIGURE PORTS AND IP ADDRESSES---------------------------------------------
 
 
-echo -e "\e[38;5;82mConfiguring ports and IP addresses...\033[0m"
+echo -e "$LIME Configuring ports and IP addresses...$NC "
 #AB This section rewrites your ethernet IP to be on the same network as the VLP-32C default. If your sensors are not connecting, you're probably on the wrong subnet.
-#FK This older line of code is probably unnecessary: sudo ip route add 192.168.1.201 dev enp152s0 #AB Replace enp152s0 with the name of your ethernet port, which can be found by running ip address 
 #FK Add a network connection to the ethernet port with the stable ipv4 address 192.168.1.100/24, which is necessary to connect to the VLP-32C LiDAR puck
 nmcli connection add type ethernet ifname $ethernet con-name lidar-puck autoconnect yes ipv4.addresses "192.168.1.201" ipv4.method manual
 
@@ -164,7 +165,7 @@ nmcli connection add type ethernet ifname $ethernet con-name lidar-puck autoconn
 #---------------------------------------------INSTALL VELOVIEW---------------------------------------------
 
 
-echo -e "\e[38;5;82mInstalling VeloView...\033[0m"
+echo -e "$LIME Installing VeloView...$NC "
 cd ~/Apps
 
 #AB Download VeloView 5.1 for Ubuntu from the web. Update this URL if VeloView ever stops working.
@@ -193,17 +194,17 @@ rm veloview.tar.gz #AB delete the archive previously downloaded
 #---------------------------------------------INSTALL SLAM---------------------------------------------
 
 
-echo -e "\e[38;5;82mInstalling lidarslam_ros2...\033[0m"
+echo -e "$LIME Installing lidarslam_ros2...$NC "
 cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the ingenium_cartographer/agent_scripts directory. 
 # ./Install_rsasaki_slam.sh #AB Run the Install_rsasaki_slam.sh script to install lidarslam_ros2 
-echo -e "\e[38;5;196m\033[1m DID NOT RUN SLAM INSTALLER. THE RELEVANT LINE OF CODE HAS BEEN COMMENTED UNTIL THE SCRIPT IS COMPLETE \033[0m"
+echo -e "\e[38;5;196m\033[1m DID NOT RUN SLAM INSTALLER. THE RELEVANT LINE OF CODE HAS BEEN COMMENTED UNTIL THE SCRIPT IS COMPLETE $NC "
 
 
 
 #---------------------------------------------CONFIGURE UI---------------------------------------------
 
 
-echo -e "\e[38;5;82mSetting system colors to dark mode with blue accents...\033[0m"
+echo -e "$LIME Setting system colors to dark mode with blue accents...$NC "
 #AB Set global color scheme to dark mode
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
@@ -222,7 +223,7 @@ gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-blue-dark'
 #---------------------------------------------CLEANUP---------------------------------------------
 
 
-echo -e "\e[38;5;82mCleaning up...\033[0m"
+echo -e "$LIME Cleaning up...$NC "
 
 echo 'alias update="sudo apt update && sudo apt upgrade && sudo apt autoremove"' >> ~/.bashrc #AB add the alias update to the system ~/.bashrc file. It will now update, upgrade, and finally autoremove all unnecessary files whenever the command "update" is entered.
 
@@ -231,7 +232,7 @@ sudo apt autoremove #AB Remove all files not needed in the system. Frees up a va
 
 gsettings set org.gnome.desktop.background picture-uri file:~/Documents/GitHub/ingenium_cartographer/blanchard.png #AB Set the desktop background to blanchard.png from the GitHub.
 
-echo -e "\e[38;5;82mDefault_Apps_Installer.sh has finished running now.\033[0m"
+echo -e "$LIME Default_Apps_Installer.sh has finished running.$NC "
 
 cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts
 ./reboot.sh
