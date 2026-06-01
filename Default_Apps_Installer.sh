@@ -93,6 +93,7 @@ echo -e "$LIME Creating default directory structure...$NC "
 mkdir ~/Documents
 mkdir ~/Documents/GitHub
 mkdir ~/Documents/Data
+mkdir ~/Documents/Garbage
 
 mkdir ~/Apps
 mkdir ~/Apps/ros2_ws/src
@@ -100,7 +101,10 @@ mkdir ~/Apps/ros2_ws/src
 
 cd ~/Documents #AB Clone the RFCS repository, which contains .md files which document work that needs to be done.
 git clone https://github.com/ingenium-lidar/RFCs.git
-cd ~
+
+cd ~/Documents/Garbage
+touch README.md
+echo -e "# Instructions for Garbage Directory \n\n This directory exists for files that are of no value, and can safely be deleted. Use it to test tools that create files, to temporarily store copies of important data files that you're editing, to actually type \`rm -rfd ./*\` for once, etc">README.md
 
 
 
