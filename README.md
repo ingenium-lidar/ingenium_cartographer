@@ -47,30 +47,9 @@
 
     Ommitting a parameter is the same as calling `--help`. 
 
-2. If these are not working, there is an alternative method below. 
+<details>
 
-## Instructions for Gathering and Processing Data
-
-0. Connect your LiDAR Hardware (this is tested with a Velodyne VLP-32C Ultra Puck) and IMU (this is tested with a LORD Microstrain 3DM-GX5-15/3DM-GX5-AR) to the data gathering device. Run `./record_to_bag.sh`. This should procduce a .mcap file in `~/Documents/Data`
-
-1. On the fastest available computer, run `./process_bag.sh /path/to/your/mcap/file.mcap`. [NOTE: The dependencies for this script are not included in the minimal installation for Raspberry Pi!] [NOTE: this script is not yet functional!]
-
-
-
-## Instructions for Downloading a Single File from GitHub with the Command Line
-
-1. On the GitHub website, navigate to the file you want to download and open the preview
-
-2. On the upper right of the page, select "Raw" and copy the URL
-
-3. On your device, run
-
-`wget -O [new_file_name] https://raw.githubusercontent.com/[my_user_name]/[my_repository]/refs/heads/[my_branch]/[name_of_my_file]`
-
-For example, to download `RPi_Default_Apps_Installer.sh`, run:
-
-`wget -O RPi_Default_Apps_Installer.sh https://raw.githubusercontent.com/JohannesByle/ingenium_cartographer/refs/heads/jazzy/RPi_Default_Apps_Installer.sh`
-
+<summary>Alternative Installation Instructions</summary>
 
 ## Alternative Installation Instructions
 
@@ -98,3 +77,38 @@ If you'd rather not run a random bash script straight off the web, you can use t
     `./install.sh dev-jazzy`
     
     These scripts frequently prompt sudo at various stages of the process. This is normal. 
+
+</details>
+
+## Instructions for Gathering and Processing Data
+
+0. Connect your LiDAR Hardware (this is tested with a Velodyne VLP-32C Ultra Puck) and IMU (this is tested with a LORD Microstrain 3DM-GX5-15/3DM-GX5-AR) to the data gathering device. Run `./record_to_bag.sh`. This should procduce a .mcap file in `~/Documents/Data`
+
+1. On the fastest available computer, run `./process_bag.sh /path/to/your/mcap/file.mcap`. 
+
+    [!NOTE] The dependencies for this script are not included in the minimal installation for Raspberry Pi!
+
+    [!WARNING] this script is not yet functional!
+
+
+<details>
+
+<summary>Instructions for Downloading a Single File from GitHub with the Command Line</summary>
+
+## Instructions for Downloading a Single File from GitHub with the Command Line
+
+1. On the GitHub website, navigate to the file you want to download and open the preview
+
+2. On the upper right of the page, select "Raw" and copy the URL
+
+3. On your device, run
+
+`wget -O [new_file_name] https://raw.githubusercontent.com/[my_user_name]/[my_repository]/refs/heads/[my_branch]/[name_of_my_file]`
+
+For example, to download `RPi_Default_Apps_Installer.sh`, run:
+
+`wget -O RPi_Default_Apps_Installer.sh https://raw.githubusercontent.com/JohannesByle/ingenium_cartographer/refs/heads/jazzy/RPi_Default_Apps_Installer.sh`
+
+</details>
+
+
