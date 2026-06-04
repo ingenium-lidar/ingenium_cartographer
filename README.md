@@ -31,15 +31,15 @@
 
 1. Once you have decided which variant you would like to run, insert the relevant argument into the following template:
 
-    `bash <(curl -L tinyurl.com/ingenium-lidar-install) [arg]`
+    `bash <(curl -L tinyurl.com/ingenium-lidar-installer) [arg]`
 
     For example, to print the help menu without installing anything, I would run
 
-    `bash <(curl -L tinyurl.com/ingenium-lidar-install) --help` in terminal.
+    `bash <(curl -L tinyurl.com/ingenium-lidar-installer) --help` in terminal.
 
     To install the ROS Jazzy-flavored development environment, I would run 
 
-    `bash <(curl -L tinyurl.com/ingenium-lidar-install) --dev-jazzy`
+    `bash <(curl -L tinyurl.com/ingenium-lidar-installer) --dev-jazzy`
 
 
 <details>
@@ -52,20 +52,18 @@ If you'd rather not run a random bash script straight off the web, you can use t
 
 0. Use wget to download `install.sh` from the internet. We provide a tinyurl link to simplify this process. The appropriate command is
 
-    `wget -O install.sh https://tinyurl.com/ingenium-lidar-install`
+    `wget -O install.sh https://tinyurl.com/ingenium-lidar-installer`
 
 1. Mark the downloaded script as executable by running `chmod +x install.sh`
 
 2. Run the script with the appropriate argument to install a particular set of software packages from this repository. The valid arguments are: 
 
     - `dev-jazzy`
-    - `dev-humble`
     - `rpi`
-    - `slam` 
     - `sl`
     - `--help`
 
-    The `--help` option provides more information about the different options. `dev-jazzy` is intended for use on the Ubuntu 24.04.1 LTS Desktop developer laptop for a LiDAR project. `dev-humble` is intended for an Ubuntu 22.04.5 LTS Desktop developer project which requires ROS Humble (in our case, this exists to facilitate work with LIO-SAM). `rpi` is intended for use on an Ubuntu 24.04.2 LTS Server installation on a Raspberry Pi 3. It exclusively installs the dependencies and packages needed for recording data from the LiDAR puck and IMU. `slam` is currently almost identical to `dev-humble`, except that it assumes a WSL installation and installs Gnome GUI before running `dev-humble`. For more details on `sl`, see the help menu.
+    The `--help` option provides more information about the different options. `dev-jazzy` is intended for use on the Ubuntu 24.04.1 LTS Desktop developer laptop for a LiDAR project. `rpi` is intended for use on an Ubuntu 24.04.2 LTS Server installation on a Raspberry Pi 3. It exclusively installs the dependencies and packages needed for recording data from the LiDAR puck and IMU. For more details on `sl`, see the help menu.
 
     To set up the dev-jazzy system, you would run
 
@@ -100,7 +98,7 @@ If you'd rather not run a random bash script straight off the web, you can use t
 
 `wget -O [new_file_name] https://raw.githubusercontent.com/[my_user_name]/[my_repository]/refs/heads/[my_branch]/[name_of_my_file]`
 
-For example, to download `RPi_Default_Apps_Installer.sh`, run:
+For example, to download a deprecated version of `RPi_Default_Apps_Installer.sh`, run:
 
 `wget -O RPi_Default_Apps_Installer.sh https://raw.githubusercontent.com/JohannesByle/ingenium_cartographer/refs/heads/jazzy/RPi_Default_Apps_Installer.sh`
 
