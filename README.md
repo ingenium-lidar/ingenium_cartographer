@@ -14,9 +14,7 @@
     The valid arguments are: 
 
     - `dev-jazzy`
-    - `dev-humble` [DEPRECATED!]
     - `rpi`
-    - `slam` 
     - `sl`
     - `--help`
 
@@ -24,13 +22,11 @@
 
     `dev-jazzy` is intended for use on the Ubuntu 24.04.1 LTS Desktop developer laptop for a LiDAR project. 
 
-    `dev-humble` is intended for an Ubuntu 22.04.5 LTS Desktop developer project which requires ROS Humble (in our case, this exists to facilitate work with LIO-SAM). 
-
     `rpi` is intended for use on an Ubuntu 24.04.2 LTS Server installation on a Raspberry Pi 3. It exclusively installs the dependencies and packages needed for recording data from the LiDAR puck and IMU. 
 
-    `slam` is currently almost identical to `dev-humble`, except that it assumes a WSL installation and installs Gnome GUI before running `dev-humble`. 
-
     For more details on `sl`, see the help menu.
+
+    Ommitting a parameter or submitting an invalid parameter is the same as calling `--help`. 
 
 
 1. Once you have decided which variant you would like to run, insert the relevant argument into the following template:
@@ -45,7 +41,6 @@
 
     `bash <(curl -L tinyurl.com/ingenium-lidar-install) --dev-jazzy`
 
-    Ommitting a parameter is the same as calling `--help`. 
 
 <details>
 
