@@ -70,6 +70,8 @@ If you'd rather not run a random bash script straight off the web, you can use t
 
 0. Connect your LiDAR Hardware (this is tested with a Velodyne VLP-32C Ultra Puck) and IMU (this is tested with a LORD Microstrain 3DM-GX5-15/3DM-GX5-AR) to the data gathering device. Run `./record_to_bag.sh`. This should procduce a .mcap file in `~/Documents/Data`
 
+    - Optionally, you may include a parameter: `./record_to_bag.sh [Location_Identifier]` where `[Location_Identifier]` is an arbitrary string that will help you remember where you took your data. If you do not use this parameter, the script will prompt you for a "Grid ID", which is the same thing. This identifier will be included in your file path.
+
 1. On the fastest available computer, run `./process_bag.sh /path/to/your/mcap/file.mcap`. 
 
     [!NOTE] The dependencies for this script are not included in the minimal installation for Raspberry Pi!
