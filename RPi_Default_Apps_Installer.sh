@@ -57,6 +57,7 @@ sudo mv use_network_manager.yaml /etc/netplan #FK move file that makes Ubuntu Se
 
 sudo chmod +x RPi_Network_Config.sh #FK mark the second installer script as executable
 sudo mv RPi_Network_Config.sh ~ #FK move second installer script to the main directory
+sudo mv .bash_aliases ~ #AB Move the .bash_aliases file in cartographer_config to the home directory. 
 #AB Clean up all files in cartographer_config that aren't needed for the ROS2 system
 mv microstrain_launch_ingenium.py ..
 cd ..
