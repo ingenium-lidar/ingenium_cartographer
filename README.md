@@ -1,19 +1,80 @@
 # ingenium_cartographer
 
-&nbsp; &nbsp; &nbsp; This branch of the repository contains bash scripts and config files for slamming data for the Wheaton College Tel Shimron lidar project. This branch is built on ROS2 Humble Hawksbill, since LIO-SAM does not yet work with ROS2 Jazzy Jalisco. As of this writing (August 2025) this branch is NOT complete, and NOT functional.
+&nbsp; &nbsp; &nbsp; This branch of the repository contains bash scripts and config files for slamming data for the Wheaton College Tel Shimron lidar project. This branch is built on ROS2 Jazzy Jalisco. As of this writing (May 2026) this branch is NOT complete, and NOT functional.
 
 
 ![Screenshot](blanchard.png)
 
-## A Brief Note About Comments
 
-Abraham's comments are denoted by #AB
-
-Milan's comments are denoted by #MS
-
-Finn's comments are denoted by #FK
 
 ## Installation Instructions
+
+0. Select the variant of this package that you want to install.
+
+    The valid arguments are: 
+
+    - `dev-jazzy`
+    - `dev-humble` [DEPRECATED!]
+    - `rpi`
+    - `slam` 
+    - `sl`
+    - `--help`
+
+    The `--help` option provides more information about the different options. 
+
+    `dev-jazzy` is intended for use on the Ubuntu 24.04.1 LTS Desktop developer laptop for a LiDAR project. 
+
+    `dev-humble` is intended for an Ubuntu 22.04.5 LTS Desktop developer project which requires ROS Humble (in our case, this exists to facilitate work with LIO-SAM). 
+
+    `rpi` is intended for use on an Ubuntu 24.04.2 LTS Server installation on a Raspberry Pi 3. It exclusively installs the dependencies and packages needed for recording data from the LiDAR puck and IMU. 
+
+    `slam` is currently almost identical to `dev-humble`, except that it assumes a WSL installation and installs Gnome GUI before running `dev-humble`. 
+
+    For more details on `sl`, see the help menu.
+
+
+1. Once you have decided which variant you would like to run, insert the relevant argument into the following template:
+
+    `bash <(curl -L tinyurl.com/ingenium-lidar-install) [arg]`
+
+    For example, to print the help menu without installing anything, I would run
+
+    `bash <(curl -L tinyurl.com/ingenium-lidar-install) --help` in terminal.
+
+    To install the ROS Jazzy-flavored development environment, I would run 
+
+    `bash <(curl -L tinyurl.com/ingenium-lidar-install) --dev-jazzy`
+
+    Ommitting a parameter is the same as calling `--help`. 
+
+2. If these are not working, there is an alternative method below. 
+
+## Instructions for Gathering and Processing Data
+
+0. Connect your LiDAR Hardware (this is tested with a Velodyne VLP-32C Ultra Puck) and IMU (this is tested with a LORD Microstrain 3DM-GX5-15/3DM-GX5-AR) to the data gathering device. Run `./record_to_bag.sh`. This should procduce a .mcap file in `~/Documents/Data`
+
+1. On the fastest available computer, run `./process_bag.sh /path/to/your/mcap/file.mcap`. [NOTE: The dependencies for this script are not included in the minimal installation for Raspberry Pi!] [NOTE: this script is not yet functional!]
+
+
+
+## Instructions for Downloading a Single File from GitHub with the Command Line
+
+1. On the GitHub website, navigate to the file you want to download and open the preview
+
+2. On the upper right of the page, select "Raw" and copy the URL
+
+3. On your device, run
+
+`wget -O [new_file_name] https://raw.githubusercontent.com/[my_user_name]/[my_repository]/refs/heads/[my_branch]/[name_of_my_file]`
+
+For example, to download `RPi_Default_Apps_Installer.sh`, run:
+
+`wget -O RPi_Default_Apps_Installer.sh https://raw.githubusercontent.com/JohannesByle/ingenium_cartographer/refs/heads/jazzy/RPi_Default_Apps_Installer.sh`
+
+
+## Alternative Installation Instructions
+
+If you'd rather not run a random bash script straight off the web, you can use this method to download and inspect the relevant file before you run it. 
 
 0. Use wget to download `install.sh` from the internet. We provide a tinyurl link to simplify this process. The appropriate command is
 
@@ -36,26 +97,4 @@ Finn's comments are denoted by #FK
 
     `./install.sh dev-jazzy`
     
-    These scripts frequently prompt sudo at various stages of the process. This is normal. You should monitor the installaton process--it currently requests user input a LOT, and we haven't figured out how to fix that yet.
-
-## Instructions for Gathering and Processing Data
-
-0. Connect your LiDAR Hardware (this is tested with a Velodyne VLP-32C Ultra Puck) and IMU (this is tested with a LORD Microstrain 3DM-GX5-15/3DM-GX5-AR) to the data gathering device. Run `./record_to_bag.sh`. This should procduce a .mcap file in `~/Documents/Data` (this directory will be created automatically by `cleanup.sh` if it does not yet exist)
-
-1. On the fastest available computer, run `./process_bag.sh /path/to/your/mcap/file.mcap`. [NOTE: The dependencies for this script are not included in the minimal installation for Raspberry Pi!]
-
-
-
-## Instructions for Downloading a Single File from GitHub with the Command Line
-
-1. On the GitHub website, navigate to the file you want to download and open the preview
-
-2. On the upper right of the page, select "Raw" and copy the URL
-
-3. On your device, run
-
-`wget -O [new_file_name] https://raw.githubusercontent.com/[my_user_name]/[my_repository]/refs/heads/[my_branch]/[name_of_my_file]`
-
-For example, to download `RPi_Default_Apps_Installer.sh`, run:
-
-`wget -O RPi_Default_Apps_Installer.sh https://raw.githubusercontent.com/JohannesByle/ingenium_cartographer/refs/heads/jazzy/RPi_Default_Apps_Installer.sh`
+    These scripts frequently prompt sudo at various stages of the process. This is normal. 

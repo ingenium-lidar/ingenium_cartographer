@@ -3,6 +3,13 @@
 #AB To download this script, use:
 # wget -O install.sh https://tinyurl.com/ingenium-lidar-install
 
+#AB To run this script remotely, without downloading it first, use:
+# bash <(curl -L tinyurl.com/ingenium-lidar-install)
+
+#AB Running the above command with the "sl" parameter (explained below) would look like:
+# bash <(curl -L tinyurl.com/ingenium-lidar-install) sl
+
+
 parameter=$1 #AB take the parameter passed to the script
 
 
