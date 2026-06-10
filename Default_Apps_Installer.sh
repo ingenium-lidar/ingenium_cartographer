@@ -31,6 +31,7 @@ apt_packages=(
     blender            #AB Install Blender (a 3D modeling software)
     cloudcompare       #AB Install CloudCompare (a point-cloud processing software)
     dosfstools         #AB Install dependency for gparted on the previous line which lets it work with FAT32 formatting
+    firefox            #AB Install Firefox Web Browser
     gdm-settings       #AB Another OS customization tool
     git                #AB a version control tool
     git-lfs            #AB GitHub Large File Storage, an open source extension to help deal with large files in git commits.
@@ -66,21 +67,23 @@ git config --global user.email "ingenium.lidar@outlook.com"
 git config --global user.name "Ingenium-LiDAR-Admin"
 
 
+
 echo -e "$LIME Installing snap packages...$NC "
 
-snap_packages=(
-    firefox #AB Install Firefox Web Browser
+#AB Important note! We used to install CloudCompare and Blender via snap before we realized that something about how snap handles graphics on high-end GPUs was causing the apps to crash. Now we use apt instead.
+#AB We also used to snap install firefox, but apt install firefox does the same thing. Now, all of our snaps run with the --classic flag, which gives them permissions that normal snaps don't have.
+
+snap_classic_packages=(
     gh      #FK install GitHub command line interface
     emacs   #AB Install emacs, for all the people who know that instead of vim
     code    #AB Visual Studio Code, a git-integrated IDE for basically all computer languages
 )
 
-# Important note! We used to install CloudCompare and Blender via snap before we realized that something about how snap handles graphics on high-end GPUs was causing the apps to crash. Now we use apt instead.
 
-for package in "${snap_packages[@]}"; do
+for package in "${snap_classic_packages[@]}"; do
     echo ""
     echo ">>> Installing: $package"
-    sudo snap install "$package"
+    sudo snap install --classic "$package"
 done
 
 
@@ -96,7 +99,7 @@ mkdir ~/Documents/Data
 mkdir ~/Documents/Garbage
 
 mkdir ~/Apps
-mkdir ~/Apps/ros2_ws/src
+mkdir -p ~/Apps/ros2_ws/src
 
 
 cd ~/Documents #AB Clone the RFCS repository, which contains .md files which document work that needs to be done.
@@ -149,12 +152,14 @@ cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the in
 #---------------------------------------------INSTALL HARDWARE DRIVERS---------------------------------------------
 
 
-echo -e "$LIME Installing hardware drivers...$NC "
+echo -e "$LIME Updating and upgrading apt...$NC "
+sudo apt update && sudo apt upgrade -y
+sleep 1
+
 #AB We install these here and not above with the other apt installs because they require ROS Jazzy to be installed first
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get -y install ros-jazzy-velodyne #AB Install the Velodyne driver. It's in a stack hosted (I believe) on the ROS website.
-sudo apt-get -y install ros-jazzy-microstrain-inertial-driver #AB Install the IMU driver. These drivers are now maintained as part of the built-in ROS package manager! 
+echo -e "$LIME Installing hardware drivers...$NC "
+sudo apt install ros-jazzy-velodyne -y #AB Install the Velodyne driver. It's in a stack hosted (I believe) on the ROS website.
+sudo apt install ros-jazzy-microstrain-inertial-driver -y #AB Install the IMU driver. These drivers are now maintained as part of the built-in ROS package manager! 
 
 
 
@@ -233,7 +238,7 @@ gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-blue-dark'
 echo -e "$LIME Cleaning up...$NC "
 
 echo -ne "Running sudo apt autoremove:\n"
-sudo apt autoremove #AB Remove all files not needed in the system. Frees up a variable amount of space (on the Jun 24, 2025 reinstall, I had superfluous firmware. You never know...)
+sudo apt autoremove -y #AB Remove all files not needed in the system. Frees up a variable amount of space (on the Jun 24, 2025 reinstall, I had superfluous firmware. You never know...)
 
 gsettings set org.gnome.desktop.background picture-uri file:~/Documents/GitHub/ingenium_cartographer/blanchard.png #AB Set the desktop background to blanchard.png from the GitHub.
 
