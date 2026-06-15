@@ -10,6 +10,7 @@ ros2 launch lidarslam lidarslam.launch.py &
 
 ros2 bag play "$input_file" 
 
+ros2 service call /map_save std_srvs/Empty
 
 echo "Bag fully processed, press any key to exit"
 read -r 
