@@ -51,9 +51,7 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release #AB Colco
 
 #---------------------------------------------ADD ALIASES ETC---------------------------------------------
 
-
-echo 'source ~/Apps/ndt_omp_ros2/ros2_ws/install/setup.bash' >> ~/.bashrc #AB Add command to source the SLAM package upon terminal startup to the system ~/.bashrc file.
-echo 'source ~/Apps/lidarslam_ros2/ros2_ws/install/setup.bash' >> ~/.bashrc #AB Add command to source the SLAM package upon terminal startup to the system ~/.bashrc file.
+source ~/.bashrc #AB source bashrc as a courtesy, so that aliases etc are ready as soon as installation finishes
 echo -e "\e[38;5;82mSLAM installation complete.\033[0m"
 
 
