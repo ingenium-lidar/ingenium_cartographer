@@ -87,7 +87,7 @@ sudo apt update
 sudo apt upgrade
 sudo apt autoremove
 
-#----------------------------------------------CRON THE GREAT (RFS7)-----------------------------------------------------
+#------------------------------CRON THE GREAT (RFS7 - Post Reboot Network Setup)----------------------------------
 #JD - This stores the helper script path that cron will call after reboot.
 post_reboot_helper_script="$HOME/Documents/GitHub/ingenium_cartographer/agent_scripts/RPi_post-reboot_installer.sh"
 #JD - This stores the path where RDAI leaves the post-reboot network script.

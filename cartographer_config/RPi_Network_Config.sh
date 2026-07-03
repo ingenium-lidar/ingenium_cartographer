@@ -1,14 +1,17 @@
 #!/bin/bash
 #JD - This script runs once after reboot to finish the hotspot setup.
-#-----------------------------ENSURE FAILURE (strange to say)----------------------------------------
+#------------------------------ENSURE FAILURE IF WE HAVE PROBLEMS----------------------------------------
 
 #JD - This makes the script fail nice and fast if any command fails or a required argument is missing.
 set -euo pipefail
 
+#----------------------------------------DEAD CODE--------------------------------------
 #JD - The interactive prompt below is no longer needed because RDAI now writes the password to a temporary file.
 # read -p "Enter password for hotspot: " hotspot_password
 #JD - The old direct command below is no longer needed because the password is now read from the file.
 # nmcli device wifi hotspot ifname wlan0 ssid Hotspot4 password $hotspot_password
+
+#---------------------------------------NETWORK CONFIG-------------------------------
 
 #JD - This path points to the temporary password file created before reboot.
 password_file="$1"
