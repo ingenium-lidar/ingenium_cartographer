@@ -1,20 +1,34 @@
 #!/bin/bash
+#JD - This script runs once after reboot to finish the hotspot setup.
+#-----------------------------ENSURE FAILURE (strange to say)----------------------------------------
 
-#FK run immediately after running the RPi_Default_Apps_Installer.sh script and its reboot
+#JD - This makes the script fail nice and fast if any command fails or a required argument is missing.
+set -euo pipefail
 
-#---------------------------------------------CONTINUE CONFIGURING NETWORK---------------------------------------------
+#JD - The interactive prompt below is no longer needed because RDAI now writes the password to a temporary file.
+# read -p "Enter password for hotspot: " hotspot_password
+#JD - The old direct command below is no longer needed because the password is now read from the file.
+# nmcli device wifi hotspot ifname wlan0 ssid Hotspot4 password $hotspot_password
 
-read -p "Enter password for hotspot: " hotspot_password #AB Ask the user to enter a password for the hotspot. 
+#JD - This path points to the temporary password file created before reboot.
+password_file="$1"
+#JD - This path points to the one-shot cron file that should be removed after the helper runs.
+cleanup_cron_file="$2"
 
-nmcli device wifi hotspot ifname wlan0 ssid Hotspot4 password $hotspot_password #FK tells NetworkManager to create a connection profile for a hotspot, on the network interface (aka device) with the name (ifname = interface name) wlan0, with an ssid of Hotspot 4 (so that Hotspot4 is the name that appears for people wishing to connect to it), with a certain password
-#FK tells NetworkManager to create a connection profile for a hotspot, 
-# on the network interface (aka device) with the name (ifname = interface name) wlan0, 
-# with an ssid of Hotspot 4 (so that Hotspot4 is the name that appears for people wishing to connect to it),
-# with a certain password 
+#JD - This reads the hotspot password from the temporary file without preserving line breaks.
+hotspot_password="$(tr -d '\r\n' < "$password_file")"
+
+#JD- removing the one-shot cron file and the temporary password file before permanent changes happen.
+rm -f "$cleanup_cron_file" "$password_file"
+
+#JD-This command creates the hotspot connection using the password that RDAI stored previously.
+nmcli device wifi hotspot ifname wlan0 ssid Hotspot4 password "$hotspot_password"
+
+#JD - This makes the hotspot start automatically from now on whenever the device is booted.
 nmcli connection modify id Hotspot connection.autoconnect yes
-#FK tells NetworkManager to edit the hotspot’s connection profile so that it will make the hotspot automatically on startup
-nmcli connection modify id Hotspot connection.autoconnect-priority 1
-#FK make the autoconnect priority greater than 0 so that the hotspot takes priority over other connections
-#FK at this point, after a reboot, the hotspot should automatically start on start and before login.
 
+#JD - This gives the hotspot special autoconnect priority.
+nmcli connection modify id Hotspot connection.autoconnect-priority 1
+
+#JD - This reboots so the new NetworkManager settings take effect.
 reboot

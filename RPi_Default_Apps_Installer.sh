@@ -87,6 +87,30 @@ sudo apt update
 sudo apt upgrade
 sudo apt autoremove
 
+#----------------------------------------------CRON THE GREAT (RFS7)-----------------------------------------------------
+#JD - This stores the helper script path that cron will call after reboot.
+post_reboot_helper_script="$HOME/Documents/GitHub/ingenium_cartographer/agent_scripts/RPi_post-reboot_installer.sh"
+#JD - This stores the path where RDAI leaves the post-reboot network script.
+post_reboot_network_config="$HOME/RPi_Network_Config.sh"
+#JD - This stores the temporary password file that the reboot step will read.
+post_reboot_password_file="/var/tmp/rfs7_hotspot_password"
+#JD - This stores the one-shot cron file that will make the the helper run just one time.
+post_reboot_cron_file="/etc/cron.d/rfs7_post_reboot"
+#JD - This gets rid of any previous cron file before writing the new one.
+sudo rm -f "$post_reboot_cron_file"
+#JD - This asks for (and obtains) the hotspot password without writing it on the terminal.
+read -r -s -p "Enter password for hotspot: " hotspot_password
+#JD - FYI, this prints a new line in case you don't know. It's so that the terminal output is still readable.
+printf '\n'
+#JD - This writes the password into the temporary file that 'survives' the reboot.
+printf '%s\n' "$hotspot_password" | sudo tee "$post_reboot_password_file" >/dev/null
+#JD - This locks the password file down to root-only access (security reasons trust me).
+sudo chmod 600 "$post_reboot_password_file"
+#JD - This writes the one-shot cron entry that will invoke the helper on the next boot.
+printf '%s\n' "@reboot root /bin/bash $post_reboot_helper_script $post_reboot_network_config $post_reboot_password_file $post_reboot_cron_file" | sudo tee "$post_reboot_cron_file" >/dev/null
+#JD - This sets the cron file permissions to the mode required by cron.d.
+sudo chmod 644 "$post_reboot_cron_file"
+
 
 
 #---------------------------------------------EXIT---------------------------------------------
