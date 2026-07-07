@@ -84,6 +84,7 @@ If you'd rather not run a random bash script straight off the web, you can use t
 Rename the current repository to `ingenium_cartographer_<ros version name>` so that the new repository that will be updated and used in the future can have the convenient name ingenium_cartographer that the URLs in install.sh always link to.
 
 ### Step Two: Actually Make the Fork of this Repository using the GitHub Website
+Make sure to name it ingenium_cartographer.
 
 ### Step Three: Change the Settings of the New Repository
 Do this using the GitHub website.
