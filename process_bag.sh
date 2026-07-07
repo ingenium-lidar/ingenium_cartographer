@@ -12,17 +12,15 @@ if [ ! -f "$file" ]; then ### If parameter 1 is not a file, exit the process
   echo "$file is not a file."
   return 1
 fi
-if [ ! "${file##*.}" = "bag" ]; then ### If parameter 1 does not have a .bag extension, exit the process.
-  echo "$file is not a bag file"
+if [ ! "${file##*.}" = "mcap" ]; then ### If parameter 1 does not have a .mcap extension, exit the process.
+  echo "$file is not a mcap file."
   return 1
 fi
 
 # Move to catkin workspace ### If the script cannot do so, exit the process
 cd ~/catkin_ws/ || exit 
 # Run ros setup
-source /opt/ros/noetic/setup.bash
-# Run cartographer setup
-source install_isolated/setup.bash
+source /opt/ros/jazzy/setup.bash
 
 ### These next few lines copy a bunch of configuration files into a different directory. I'm not sure why, nor why they're using logic here rather than explicitly stating the file names they want moved where.
 config_files=("slam.launch" "slam.lua" "localization.launch" "localization.lua" "lidar_stick.urdf" "slam_visualize.launch")
