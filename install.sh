@@ -37,7 +37,7 @@ EXAMPLE
     ./install.sh --dev-jazzy
 
 
-For more details or more help with this script, please see the GitHub README.md file, located at https://github.com/ingenium-lidar/ingenium_cartographer/blob/jazzy/README.md
+For more details or more help with this script, please see the GitHub README.md file, located at https://github.com/ingenium-lidar/ingenium_cartographer/blob/main/README.md
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
    
 }
@@ -49,12 +49,12 @@ read -r
 
 if [ $parameter == "--dev-jazzy" ]; then #AB Download the Jazzy DAI
     echo "Installing Ingenium LiDAR's dev-jazzy package"
-    wget -O ingenium_lidar_installer.sh https://raw.githubusercontent.com/ingenium-lidar/ingenium_cartographer/refs/heads/jazzy/Default_Apps_Installer.sh
+    wget -O ingenium_lidar_installer.sh https://raw.githubusercontent.com/ingenium-lidar/ingenium_cartographer/refs/heads/main/Default_Apps_Installer.sh
 
 
 elif [ $parameter == "--rpi" ]; then #AB Download the Jazzy RDAI
     echo "Installing Ingenium LiDAR's rpi package"
-    wget -O ingenium_lidar_installer.sh https://raw.githubusercontent.com/ingenium-lidar/ingenium_cartographer/refs/heads/jazzy/RPi_Default_Apps_Installer.sh
+    wget -O ingenium_lidar_installer.sh https://raw.githubusercontent.com/ingenium-lidar/ingenium_cartographer/refs/heads/main/RPi_Default_Apps_Installer.sh
 
 elif [ $parameter == "--help" ] || [ $parameter == "--h" ]; then 
     print_help #AB Print the help page
