@@ -55,7 +55,7 @@ cd ..
 rosdep install --from-paths src --ignore-src -r -y #AB Automatically install dependencies of the SLAM repo
 
 #FK Build the lidarslam_ros2 package
-cd ~/Apps/lidarlsam_ros2/ros2_ws #FK move to the root of the workspace, so that "colcon build" works correctly
+cd ~/Apps/lidarslam_ros2/ros2_ws #FK move to the root of the workspace, so that "colcon build" works correctly
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release #FK build a set of packages from the correctly set up lidarslam_ros2 workspace, assuming we're in the root of that workspace
 
 source ~/Apps/lidarslam_ros2/ros2_ws/install/setup.bash #FK source lidarslam_ros2, so that it can be run soon if desired
