@@ -8,7 +8,7 @@ source ~/Apps/lidarslam_ros2/ros2_ws/install/setup.bash
 
 ros2 launch lidarslam lidarslam.launch.py &
 
-ros2 bag play "$input_file" 
+./play.sh "$input_file" 
 
 ros2 service call /map_save std_srvs/Empty
 
