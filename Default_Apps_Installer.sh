@@ -26,6 +26,9 @@ sudo apt update
 sudo apt upgrade
 sudo apt autoremove
 
+echo -e "$LIME Setting up apt package installation...$NC "
+curl -s https://packagecloud.io/install/repositories/dirk-thomas/colcon/script.deb.sh | sudo bash
+
 echo -e "$LIME Installing apt packages...$NC "
 sleep 1
 

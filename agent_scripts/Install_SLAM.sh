@@ -13,6 +13,8 @@ echo -e "\e[38;5;5m If you got a 'fatal' error saying ros2_ws already exists, do
 mkdir -p ~/Apps/lidarslam_ros2/ros2_ws/src #FK create the directory for the ROS 2 workspace of lidarslam_ros2, and the subdirectory for its source code
 echo -e "\e[38;5;5m If you got a 'fatal' error saying ros2_ws already exists, do not worry. Everything is OK. \033[0m"
 
+curl -s https://packagecloud.io/install/repositories/dirk-thomas/colcon/script.deb.sh | sudo bash #FK the colcon documentation has installation instructions which say to do this before installing colcon stuff
+#FK 2026-07-08 added the above step to DAI
 sudo apt install python3-colcon-common-extensions -y #AB 2026-06-15 added this installer to DAI
 sudo apt install python3-rosdep -y #AB install rosdep, which I guess doens't come  by default! NB! python3-rosdep2 is only for Debian--python3-rosdep is for Ubuntu 
 #AB 2026-06-15 added the above installer to DAI
@@ -55,7 +57,6 @@ rosdep install --from-paths src --ignore-src -r -y #AB Automatically install dep
 #FK Build the lidarslam_ros2 package
 cd ~/Apps/lidarlsam_ros2/ros2_ws #FK move to the root of the workspace, so that "colcon build" works correctly
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release #FK build a set of packages from the correctly set up lidarslam_ros2 workspace, assuming we're in the root of that workspace
-
 
 source ~/Apps/lidarslam_ros2/ros2_ws/install/setup.bash #FK source lidarslam_ros2, so that it can be run soon if desired
 
