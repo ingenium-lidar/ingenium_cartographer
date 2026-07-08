@@ -32,7 +32,8 @@ git clone https://github.com/rsasaki0109/ndt_omp_ros2.git -b humble #FK note: I'
 
 #FK Build the ndt_omp_ros2 workspace
 cd ~/Apps/ndt_omp_ros2/ros2_ws #FK move to the root of the workspace, so that "colcon build" works correctly
-colcon build --executor sequential --cmake-clean-first
+colcon build --executor sequential --cmake-clean-first #FK colcon build a set of packages from the correctly set up workspace ndt_omp_ros2, assuming we're in the root of that workspace
+
 echo -e "\e[38;5;5m If you got depreciation warnings and such, but nothing labeled 'error' or something else really serious, do not worry. Everything is OK. \033[0m"
 
 
@@ -53,7 +54,8 @@ rosdep install --from-paths src --ignore-src -r -y #AB Automatically install dep
 
 #FK Build the lidarslam_ros2 package
 cd ~/Apps/lidarlsam_ros2/ros2_ws #FK move to the root of the workspace, so that "colcon build" works correctly
-colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release #AB Colcon build the SLAM package
+colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release #FK build a set of packages from the correctly set up lidarslam_ros2 workspace, assuming we're in the root of that workspace
+
 
 source ~/Apps/lidarslam_ros2/ros2_ws/install/setup.bash #FK source lidarslam_ros2, so that it can be run soon if desired
 
