@@ -23,3 +23,4 @@ sudo apt autoremove -y
 
 
 sudo rm /etc/ros/rosdep/sources.list.d/20-default.list
+sudo rm -rfd ~/.ros
