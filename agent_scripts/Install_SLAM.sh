@@ -33,10 +33,15 @@ cd ~/Apps/ndt_omp_ros2/ros2_ws/src
 git clone https://github.com/rsasaki0109/ndt_omp_ros2.git -b humble #FK note: I'm NOT sure about this, but I think that this installs one software package, called ndt_omp_ros2, into the ndt_omp_ros2 workspace
 
 #FK Build the ndt_omp_ros2 workspace
-cd ~/Apps/ndt_omp_ros2/ros2_ws #FK move to the root of the workspace, so that "colcon build" works correctly
-colcon build --executor sequential --cmake-clean-first #FK colcon build a set of packages from the correctly set up workspace ndt_omp_ros2, assuming we're in the root of that workspace
+bash -lic "
+cd ~/Apps/ndt_omp_ros2/ros2_ws;
+colcon build --executor sequential --cmake-clean-first
+"
+#FK this must be done in a different terminal, because running "colcon build" and "colcon source" in the same terminal is reccomended against in the colcon documentation -- therefore the use of bash -lic
+#FK step one, change directory to the root of the workspace you want to build
+#FK step two, use the "colcon build" command to hopefully build a set of packages from the correctly set up workspace
+
 colcon graph --legend #FK print the various packages and how they depend on each other
-read #FK force the user to press enter before continuing; for debugging
 
 echo -e "\e[38;5;5m If you got depreciation warnings and such, but nothing labeled 'error' or something else really serious, do not worry. Everything is OK. \033[0m"
 
@@ -45,24 +50,29 @@ echo -e "\e[38;5;5m If you got depreciation warnings and such, but nothing label
 #---------------------------------------------INSTALL lidarslam_ros2---------------------------------------------
 
 
-#FK Source the ndt_omp_ros2 package, since this workspace (lidarslam_ros2) depends on it, and therefore needs to source it before installation
-source ~/Apps/ndt_omp_ros2/ros2_ws/install/setup.bash
-
 #AB Install the lidarslam_ros2 package's source code
 cd ~/Apps/lidarslam_ros2/ros2_ws/src
 git clone --recursive https://github.com/rsasaki0109/lidarslam_ros2
 touch ~/Apps/lidarslam_ros2/ros2_ws/src/lidarslam_ros2/Thirdparty/ndt_omp_ros2/COLCON_IGNORE #AB Tell colcon to ignore the ndt_amp_ros2 package which comes bundled with the git repo
 
-cd ..
-rosdep install --from-paths src --ignore-src -r -y #AB Automatically install dependencies of the SLAM repo
+#AB Install dependencies of the lidarslam_ros2 packages
+cd ~/Apps/lidarslam_ros2/ros2_ws
+rosdep install --from-paths src --ignore-src -r -y
 
 #FK Build the lidarslam_ros2 package
-cd ~/Apps/lidarslam_ros2/ros2_ws #FK move to the root of the workspace, so that "colcon build" works correctly
-colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release #FK build a set of packages from the correctly set up lidarslam_ros2 workspace, assuming we're in the root of that workspace
+bash -lic "
+source ~/Apps/ndt_omp_ros2/ros2_ws/install/setup.bash;
+cd ~/Apps/lidarslam_ros2/ros2_ws;
+colcon build --executor sequential --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
+"
+#FK this must be done in a different terminal, because running "colcon build" and "colcon source" in the same terminal is reccomended against in the colcon documentation -- therefore the use of bash -lic
+#FK step one, source the ndt_omp_ros2 package, since this workspace (lidarslam_ros2) depends on it, and therefore needs to source it before installation
+#FK step two, change directory to the root of the workspace you want to build
+#FK step three, use the "colcon build" command to hopefully build a set of packages from the correctly set up workspace   
+
+colcon graph --legend #FK print the various packages and how they depend on each other                                  
 
 source ~/Apps/lidarslam_ros2/ros2_ws/install/setup.bash #FK source lidarslam_ros2, so that it can be run soon if desired
-colcon graph --legend #FK print the various packages and how they depend on each other
-read #FK force the user to press enter before continuing; for debugging
 
 
 
