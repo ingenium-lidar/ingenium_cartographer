@@ -5,7 +5,8 @@ source /opt/ros/jazzy/setup.bash
 
 #AB Launch the node to remap /velodyne_packets (proprietary format) to /velodyne_points (of type sensor_msgs/msg/PointCloud2)
 #AB This node has been further custom-edited to remap /velodyne_points to /input_cloud
-ros2 launch cartographer_config/velodyne_transform_node-VLP32C-launch_ingenium.py &
+ros2 launch cartographer_config/velodyne_transform_node-VLP32C-launch_ingenium.py & #AB TODO: Go back to the default launch file.
+ros2 run topic_tools relay /velodyne_points /input_cloud & #AB Pass the packets published on /velodyne_points by the transform node to the /input_cloud topic read by the SLAM node. 
 
 #AB Play back the data file, remapping the old IMU topic name to the one that SLAM expects.
 ros2 bag play $data_file --remap /gx5/imu/data:=/imu &

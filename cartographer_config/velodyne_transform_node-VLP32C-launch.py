@@ -51,7 +51,7 @@ def generate_launch_description():
                                                       executable='velodyne_transform_node',
                                                       output='both',
                                                       parameters=[params],
-                                                      remappings=[('/velodyne_points', '/input_cloud')]) #AB I edited this line. This was the only line of the original launch.py file that I added, and I did not subtract any code.
+                                                      )
 
     return launch.LaunchDescription([velodyne_transform_node,
 
