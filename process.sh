@@ -22,7 +22,7 @@ source ~/Apps/lidarslam_ros2/ros2_ws/install/setup.bash
 ros2 run robot_state_publisher robot_state_publisher cartographer_config/lidar_stick.urdf &
 
 #AB Launch the SLAM node
-ros2 launch lidarslam lidarslam.launch.py main_param_dir:=/home/lidar/Apps/lidarslam_ros2/ros2_ws/src/lidarslam_ros2/lidarslam/param/lidarslam.yaml &
+ros2 launch lidarslam lidarslam.launch.py main_param_dir:=cartographer_config/lidarslam_ingenium.yaml &
 
 
 #---------------------------------------------REMAP AND TRANSLATE TOPICS---------------------------------------------
