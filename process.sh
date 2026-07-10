@@ -1,6 +1,7 @@
 #!/bin/bash
 
 input_file="$1"
+output_dir_name=${input_file%.*}
 
 
 
@@ -50,3 +51,16 @@ read -r
 
 #AB After the user has acknowledged that the program is done, try to save the map
 ros2 service call /map_save std_srvs/Empty
+
+
+
+#---------------------------------------------MOVE FILES TO APPROPRIATE LOCATION---------------------------------------------
+
+
+#AB Note that these are a temporary measure, and do not necessarily comply with the Default Filesystem Standard.
+mkdir -p ~/Documents/Data/$output_dir_name
+
+mv map.pcd ~/Documents/Data/$output_dir_name/map.pcd
+mv map_projector_info.yaml ~/Documents/Data/$output_dir_name/map_projector_info.yaml
+mv pose_graph.g2o ~/Documents/Data/$output_dir_name/pose_graph.g2o
+mv pointcloud_map/ ~/Documents/Data/$output_dir_name/pointcloud_map/
