@@ -64,3 +64,5 @@ mv map.pcd ~/Documents/Data/$output_dir_name/map.pcd
 mv map_projector_info.yaml ~/Documents/Data/$output_dir_name/map_projector_info.yaml
 mv pose_graph.g2o ~/Documents/Data/$output_dir_name/pose_graph.g2o
 mv pointcloud_map/ ~/Documents/Data/$output_dir_name/pointcloud_map/
+
+echo "Map saved to ~/Documents/Data/$output_dir_name/map.pcd"
