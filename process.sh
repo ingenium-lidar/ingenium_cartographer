@@ -32,7 +32,7 @@ ros2 launch lidarslam lidarslam.launch.py &
 ros2 launch /opt/ros/jazzy/share/velodyne_pointcloud/launch/velodyne_transform_node-VLP32C-launch.py & 
 
 #AB Pass the packets published on /velodyne_points by the transform node to the /input_cloud topic read by the SLAM node. 
-ros2 run topic_tools relay /velodyne_points /input_cloud & 
+ros2 run topic_tools relay /velodyne_points /points_raw & 
 
 #AB Rename the IMU topic to match what the SLAM node expects.  
 ros2 run topic_tools relay /gx5/imu/data /imu & 
