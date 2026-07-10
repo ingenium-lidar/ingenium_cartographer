@@ -8,3 +8,5 @@ source /opt/ros/jazzy/setup.bash
 #AB source some SLAM packages
 source ~/Apps/ndt_omp_ros2/ros2_ws/install/setup.bash
 source ~/Apps/lidarslam_ros2/ros2_ws/install/setup.bash
+
+alias roskill="~/Documents/GitHub/helper-scripts/roskill.sh"
