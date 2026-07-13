@@ -5,7 +5,7 @@ scan_matcher:
     robot_frame_id: "base_link"
     registration_method: "NDT"
     ndt_resolution: 2.0
-    ndt_num_threads: 8
+    ndt_num_threads: 0
     gicp_corr_dist_threshold: 5.0
     trans_for_mapupdate: 1.5
     vg_size_for_input: 0.2
@@ -36,7 +36,7 @@ graph_based_slam:
     ros__parameters:
       registration_method: "NDT"
       ndt_resolution: 1.0
-      ndt_num_threads: 8
+      ndt_num_threads: 0
       voxel_leaf_size: 0.1
       # Param present in other repo with this slam, but not in lidarslam_ros2.
       loop_detection_period: 1000
