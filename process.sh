@@ -1,7 +1,7 @@
 #!/bin/bash
 
 input_file="$1"
-output_dir_name=${input_file%.*}
+output_dir_name=$(basename -s .db3 "$input_file")
 
 
 
