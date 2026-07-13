@@ -1,0 +1,35 @@
+<robot name="ingenium_lidar_robot">
+
+    <link name="imu_link">
+        <visual>
+            <origin xyz="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.036 0.024 0.0111"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <link name="velodyne">
+        <visual>
+            <origin xyz="0.0 0.0 0.0"/>
+            <geometry>
+                <cylinder length="0.0869" radius="0.05"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <link name="base_link"/>
+
+    <joint name="imu_link_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="imu_link"/>
+        <origin xyz="0 0 0" rpy="3.14159265358979 1.57079632 -1.57079632"/>
+    </joint>
+
+    <joint name="velodyne_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="velodyne"/>
+        <origin xyz="0 0.030988 0.072" rpy="0 0 1.57079632679"/>
+    </joint>
+
+</robot>

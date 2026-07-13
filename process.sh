@@ -19,7 +19,7 @@ source ~/Apps/lidarslam_ros2/ros2_ws/install/setup.bash
 
 #AB Publish the relevant transforms from the urdf file
 # TODO: [WARN] [1783512779.897357455] [robot_state_publisher]: No robot_description parameter, but command-line argument available.  Assuming argument is name of URDF file.  This backwards compatibility fallback will be removed in the future.
-ros2 run robot_state_publisher robot_state_publisher cartographer_config/lidar_stick.urdf &
+ros2 run robot_state_publisher robot_state_publisher cartographer_config/lidar_robot.urdf &
 
 #AB Launch the SLAM node
 ros2 launch lidarslam lidarslam.launch.py main_param_dir:=cartographer_config/lidarslam_ingenium.yaml &
