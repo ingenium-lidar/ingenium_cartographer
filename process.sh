@@ -66,3 +66,34 @@ mv pose_graph.g2o ~/Documents/Data/$output_dir_name/pose_graph.g2o
 mv pointcloud_map/ ~/Documents/Data/$output_dir_name/pointcloud_map/
 
 echo "Map saved to ~/Documents/Data/$output_dir_name/map.pcd"
+
+
+
+#---------------------------------------------DEBUGGING: CONVERT g2o AND pcd TO poly AND ply---------------------------------------------
+
+#AB If last color file does not exist, create it
+
+if [ ! -f cartographer_config/.last_color_used.txt ]; then
+    echo "(255,0,0)" > cartographer_config/.last_color_used.txt
+fi
+
+last_color=$(cat cartographer_config/.last_color_used.txt)
+
+#AB If the last color was red, move to green, if it was green, move to blue, if it was blue, move to red
+
+if [ "$last_color" == "(255,0,0)" ]; then
+    echo "(0,255,0)" > cartographer_config/.last_color_used.txt
+    new_color="(0,255,0)"
+elif [ "$last_color" == "(0,255,0)" ]; then
+    echo "(0,0,255)" > cartographer_config/.last_color_used.txt
+    new_color="(0,0,255)"
+else
+    echo "(255,0,0)" > cartographer_config/.last_color_used.txt
+    new_color="(255,0,0)"
+fi
+
+#AB Convert the g2o file to a poly file
+~/Documents/GitHub/SLAM_testing/tools/g2o-to-poly.py ~/Documents/Data/$output_dir_name/pose_graph.g2o ~/Documents/Data/$output_dir_name/pose_graph.poly
+
+#AB Convert the pcd file to a ply file of different color than the previous two
+~/Documents/GitHub/SLAM_testing/tools/pcd-to-colored-ply.py ~/Documents/Data/$output_dir_name/map.pcd "$new_color"
