@@ -94,11 +94,13 @@ if [ -z "$color" ]; then #AB If color parameter is empty...
     fi
 
     last_color="$(<"$last_color_file")" #AB Get the last color from the file...
-    #AB And move red > green > blue > back to red again in a loop
+    #AB And move red > green > blue > yellow > magenta > cyan in a loop
     case "$last_color" in
         "(255,0,0)") new_color="(0,255,0)" ;;
         "(0,255,0)") new_color="(0,0,255)" ;;
-        *) new_color="(255,0,0)" ;;
+        "(0,0,255)") new_color="(255,255,0)" ;;
+        "(255,255,0)") new_color="(255,0,255)" ;;
+        *) new_color="(0,255,255)" ;;
     esac
     printf '%s\n' "$new_color" > "$last_color_file"
 else #AB If there _is_ a color parameter, just roll with that
