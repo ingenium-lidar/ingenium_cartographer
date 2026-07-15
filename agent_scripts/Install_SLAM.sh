@@ -28,10 +28,10 @@ bash ~/Documents/GitHub/ingenium_cartographer/agent_scripts/Uninstall_SLAM.sh #F
 mkdir -p ~/Apps/ndt_omp_ros2 #FK a neatly named storage for it
 mkdir ~/Apps/ndt_omp_ros2/ros2_ws #FK the root directory of the workspace
 mkdir ~/Apps/ndt_omp_ros2/ros2_ws/src #FK directory for the source code
-#The lidarslam_ros2 workspace
-mkdir -p ~/Apps/lidarslam_ros2 #FK a neatly named storage for it
-mkdir ~/Apps/lidarslam_ros2/ros2_ws #FK the root directory of the workspace
-mkdir ~/Apps/lidarslam_ros2/ros2_ws/src #FK directory for the source code
+#The lidar_slam_ros2 workspace
+mkdir -p ~/Apps/lidar_slam_ros2 #FK a neatly named storage for it
+mkdir ~/Apps/lidar_slam_ros2/ros2_ws #FK the root directory of the workspace
+mkdir ~/Apps/lidar_slam_ros2/ros2_ws/src #FK directory for the source code
 
 #FK Source the version of ros, in case needed later
 source /opt/ros/jazzy/setup.bash #FK source the version of ros
@@ -50,7 +50,7 @@ rosdep update  #AB update rosdep
 #---------------------------------------------INSTALL ndt_omp_ros2---------------------------------------------
 
 
-#FK Note: since the lidarslam_ros2 workspace depends on the ndt_omp_ros2 workspace, ndt_omp_ros2 has to be installed first, which is why this section (INSTALL ndt_omp_ros2) comes before the next section (INSTALL lidarslam_ros2)
+#FK Note: since the lidar_slam_ros2 workspace depends on the ndt_omp_ros2 workspace, ndt_omp_ros2 has to be installed first, which is why this section (INSTALL ndt_omp_ros2) comes before the next section (INSTALL lidar_slam_ros2)
 
 #FK Install the ndt_omp_ros2 workspace's source code
 cd ~/Apps/ndt_omp_ros2/ros2_ws/src
@@ -70,38 +70,38 @@ echo -e "\e[38;5;5m If you got depreciation warnings and such, but nothing label
 
 
 
-#---------------------------------------------INSTALL lidarslam_ros2---------------------------------------------
+#---------------------------------------------INSTALL lidar_slam_ros2---------------------------------------------
 
 
-#AB Install the lidarslam_ros2 package's source code
-cd ~/Apps/lidarslam_ros2/ros2_ws/src
-git clone --recursive https://github.com/rsasaki0109/lidarslam_ros2
-touch ~/Apps/lidarslam_ros2/ros2_ws/src/lidarslam_ros2/Thirdparty/ndt_omp_ros2/COLCON_IGNORE #AB Tell colcon to ignore the ndt_amp_ros2 package which comes bundled with the git repo
+#AB Install the lidar_slam_ros2 package's source code
+cd ~/Apps/lidar_slam_ros2/ros2_ws/src
+git clone --recursive https://github.com/rsasaki0109/lidar_slam_ros2
+touch ~/Apps/lidar_slam_ros2/ros2_ws/src/lidar_slam_ros2/Thirdparty/ndt_omp_ros2/COLCON_IGNORE #AB Tell colcon to ignore the ndt_amp_ros2 package which comes bundled with the git repo
 
-#AB Install dependencies of the lidarslam_ros2 packages
-cd ~/Apps/lidarslam_ros2/ros2_ws
+#AB Install dependencies of the lidar_slam_ros2 packages
+cd ~/Apps/lidar_slam_ros2/ros2_ws
 source ~/Apps/ndt_omp_ros2/ros2_ws/install/setup.bash #FK in case it's necessary for rosdep to recognize that we have the workspace
 rosdep install --from-paths src --ignore-src -r -y
 
-#FK Build the lidarslam_ros2 workspace
+#FK Build the lidar_slam_ros2 workspace
 source ~/Apps/ndt_omp_ros2/ros2_ws/install/setup.bash #FK source the ndt_omp_ros2 workspace
 #FK Reasoning for the above command:
-#FK Since lidarslam_ros2 needs ndt_omp_ros2 (according to lidarslam_ros2's README.md),
+#FK Since lidar_slam_ros2 needs ndt_omp_ros2 (according to lidar_slam_ros2's README.md),
 #FK I assume that they are "chained workspaces" (a colcon term)
 #FK @TODO check the above assumption
 #FK More about chained workspaces: https://colcon.readthedocs.io/en/released/user/using-multiple-workspaces.html
 #FK And if this assumption is correct,
-#FK ndt_omp_ros2 must be sourced before building lidarslam_ros2.
-cd ~/Apps/lidarslam_ros2/ros2_ws #FK change directory to the root of the workspace you want to build
+#FK ndt_omp_ros2 must be sourced before building lidar_slam_ros2.
+cd ~/Apps/lidar_slam_ros2/ros2_ws #FK change directory to the root of the workspace you want to build
 colcon build --executor sequential --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release #FK use the colcon build command to hopefully build a set of packages from the correctly set up workspace   
 #FK For easier debugging, used "--executor sequential" to make things not happen simultaneously
-#FK Used the rest of the command following lidarslam_ros2's README.md 
+#FK Used the rest of the command following lidar_slam_ros2's README.md 
 
-#FK Set up lidarslam_ros2 prep to happen whenever the terminal opens
-echo "source ~/Apps/lidarslam_ros2/ros2_ws/install/setup.bash" >> ~/.bashrc #FK make it so that whenever the graphical terminal opens, source lidarslam_ros2, so that it can be run soon if desired
+#FK Set up lidar_slam_ros2 prep to happen whenever the terminal opens
+echo "source ~/Apps/lidar_slam_ros2/ros2_ws/install/setup.bash" >> ~/.bashrc #FK make it so that whenever the graphical terminal opens, source lidar_slam_ros2, so that it can be run soon if desired
 
 #FK Note: if ndt_omp_ros2 is chained correctly (which I assume is true),
-#FK you don't need to source ndt_omp_ros2 in order to run lidarslam_ros2,
+#FK you don't need to source ndt_omp_ros2 in order to run lidar_slam_ros2,
 #FK which is why I didn't add a source command for ndt_omp_ros2 to the bashrc.
 
 #FK Reboot
