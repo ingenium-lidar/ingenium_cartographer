@@ -1,7 +1,26 @@
 #!/bin/bash
 
-input_file="$1"
-output_dir_name=$(basename -s .db3 "$input_file")
+
+
+#---------------------------------------------GET INPUT AND SET GLOBALS---------------------------------------------
+
+
+input_file="${1:?input_file is required}"
+color="$2"
+
+if [ -z "$input_file" ]; then #AB If the $input_file variable is empty, then...
+  echo "Usage: $0 <input_db3> [color]"
+  exit 1
+fi
+
+input_file="$(realpath "$input_file")"
+if [ ! -f "$input_file" ]; then #AB If $input_file is not a file, then...
+  echo "Input file not found: $input_file"
+  exit 1
+fi
+
+output_dir_name="$(basename -s .db3 "$input_file")" #AB That is, the name of the file, but not its path, and not its .db3 extension
+last_color_file="cartographer_config/.last_color_used.txt"
 
 
 
@@ -42,13 +61,10 @@ ros2 run topic_tools relay /gx5/imu/data /imu &
 
 #---------------------------------------------PLAY DATA AND SAVE MAP---------------------------------------------
 
+ros2 bag play "$input_file"
 
-#AB Play back the data file
-ros2 bag play $input_file
-
-#AB When the bag play is done, announce that the program is done
 echo "Bag fully processed, press any key to exit"
-read -r 
+read -r
 
 #AB After the user has acknowledged that the program is done, try to save the map
 ros2 service call /map_save std_srvs/Empty
@@ -67,3 +83,33 @@ mv pose_graph.g2o ~/Documents/Data/$output_dir_name/pose_graph.g2o
 mv pointcloud_map/ ~/Documents/Data/$output_dir_name/pointcloud_map/
 
 echo "Map saved to ~/Documents/Data/$output_dir_name/map.pcd"
+
+
+
+#---------------------------------------------DEBUGGING: CONVERT g2o AND pcd TO poly AND ply---------------------------------------------
+
+
+if [ -z "$color" ]; then #AB If color parameter is empty...
+    if [ ! -f "$last_color_file" ]; then #AB If the $last_color_file does not exist...
+        printf '%s\n' "(255,0,0)" > "$last_color_file" #AB create it as default red
+    fi
+
+    last_color="$(<"$last_color_file")" #AB Get the last color from the file...
+    #AB And move red > green > blue > yellow > magenta > cyan in a loop
+    case "$last_color" in
+        "(255,0,0)") new_color="(0,255,0)" ;;
+        "(0,255,0)") new_color="(0,0,255)" ;;
+        "(0,0,255)") new_color="(255,255,0)" ;;
+        "(255,255,0)") new_color="(255,0,255)" ;;
+        *) new_color="(0,255,255)" ;;
+    esac
+    printf '%s\n' "$new_color" > "$last_color_file"
+else #AB If there _is_ a color parameter, just roll with that
+    new_color="$color"
+fi
+
+#AB Convert the g2o file to a poly file
+~/Documents/GitHub/SLAM_testing/tools/g2o-to-poly.py ~/Documents/Data/$output_dir_name/pose_graph.g2o ~/Documents/Data/$output_dir_name/pose_graph.poly
+
+#AB Convert the pcd file to a ply file of different color than the previous two
+~/Documents/GitHub/SLAM_testing/tools/pcd-to-colored-ply.py ~/Documents/Data/$output_dir_name/map.pcd "$new_color"
