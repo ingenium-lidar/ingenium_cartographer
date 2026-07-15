@@ -77,6 +77,7 @@ echo -e "\e[38;5;5m If you got depreciation warnings and such, but nothing label
 cd ~/Apps/lidar_slam_ros2/ros2_ws/src
 git clone --recursive https://github.com/rsasaki0109/lidar_slam_ros2
 touch ~/Apps/lidar_slam_ros2/ros2_ws/src/lidar_slam_ros2/Thirdparty/ndt_omp_ros2/COLCON_IGNORE #AB Tell colcon to ignore the ndt_amp_ros2 package which comes bundled with the git repo
+#FK @TODO check to see whether the default branch for this repo (develop) is the one we want to use, rather than jazzy; if we want to use jazzy, switch to that branch
 
 #AB Install dependencies of the lidar_slam_ros2 packages
 cd ~/Apps/lidar_slam_ros2/ros2_ws
