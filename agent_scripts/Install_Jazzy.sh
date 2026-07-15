@@ -38,6 +38,10 @@ echo "Installing colcon..."
 sleep 1
 sudo apt install -y colcon & #AB A build tool for ROS2
 
+echo "Preparing ROS2 Jazzy for each time the terminal opens..."
+sleep 1
+echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
+
 echo "ROS2 Jazzy installation complete."
 sleep 1
 
