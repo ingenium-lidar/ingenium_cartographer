@@ -80,7 +80,7 @@ git clone --recursive https://github.com/rsasaki0109/lidar_slam_ros2 -b jazzy
 touch ~/Apps/lidar_slam_ros2/ros2_ws/src/lidar_slam_ros2/Thirdparty/ndt_omp_ros2/COLCON_IGNORE #AB Tell colcon to ignore the ndt_amp_ros2 package which comes bundled with the git repo
 
 
-#AB Install dependencies of the lidar_slam_ros2 packages
+#AB Install packages that lidar_slam_ros2 depends on
 cd ~/Apps/lidar_slam_ros2/ros2_ws
 source ~/Apps/ndt_omp_ros2/ros2_ws/install/setup.bash #FK in case it's necessary for rosdep to recognize that we have the workspace
 rosdep install --from-paths src --ignore-src -r -y
