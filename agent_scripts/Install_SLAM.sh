@@ -37,7 +37,10 @@ mkdir ~/Apps/lidar_slam_ros2/ros2_ws/src #FK directory for the source code
 source /opt/ros/jazzy/setup.bash #FK source the version of ros
 
 #FK Install and set up colcon and rosdep
-curl -s https://packagecloud.io/install/repositories/dirk-thomas/colcon/script.deb.sh | sudo bash #FK the colcon documentation has installation instructions which say to do this before installing colcon stuff
+# curl -s https://packagecloud.io/install/repositories/dirk-thomas/colcon/script.deb.sh | sudo bash #FK the colcon documentation has installation instructions which say to do this before installing colcon stuff
+
+
+
 #FK 2026-07-08 added the above step to DAI
 sudo apt install python3-colcon-common-extensions -y #AB 2026-06-15 added this installer to DAI
 sudo apt install python3-rosdep -y #AB install rosdep, which I guess doens't come  by default! NB! python3-rosdep2 is only for Debian--python3-rosdep is for Ubuntu 

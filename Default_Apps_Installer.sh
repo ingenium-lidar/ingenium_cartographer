@@ -26,8 +26,6 @@ sudo apt update
 sudo apt upgrade
 sudo apt autoremove
 
-echo -e "$LIME Setting up apt package installation...$NC "
-curl -s https://packagecloud.io/install/repositories/dirk-thomas/colcon/script.deb.sh | sudo bash
 
 echo -e "$LIME Installing apt packages...$NC "
 sleep 1
@@ -52,8 +50,6 @@ apt_packages=(
     pcl-tools                         #AB Install pcl ("point cloud library"), used for manipulating point clouds.
     python3-pip                       #AB Install pip, Python's package manager.
     python3.12-venv                   #AB Install a package to allow creating python virtual environments
-    python3-colcon-common-extensions  #AB Install colcon, the ROS build tool.
-    python3-rosdep                    #AB Install rosdep, a tool for managing dependencies in ROS
     rpi-imager                        #AB a tool for burning OSes onto SD cards for use in a Raspberry Pi
     snapd                             #AB A package manager
     sl                                #AB Install sl, an alias for ls
@@ -158,7 +154,7 @@ cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the in
 
 
 
-#---------------------------------------------INSTALL HARDWARE DRIVERS---------------------------------------------
+#---------------------------------------------INSTALL ROS-HOSTED APT PACKAGES---------------------------------------------
 
 
 echo -e "$LIME Updating and upgrading apt...$NC "
@@ -169,6 +165,12 @@ sleep 1
 echo -e "$LIME Installing hardware drivers...$NC "
 sudo apt install ros-jazzy-velodyne -y #AB Install the Velodyne driver. It's in a stack hosted (I believe) on the ROS website.
 sudo apt install ros-jazzy-microstrain-inertial-driver -y #AB Install the IMU driver. These drivers are now maintained as part of the built-in ROS package manager! 
+
+echo -e "$LIME Installing Colcon and rosdep...$NC "
+sudo apt install python3-colcon-common-extensions -y #AB Installs both colcon and common extensions for colcon, the ROS build tool.
+sudo apt install python3-rosdep -y                   #AB Install rosdep, a tool for managing dependencies in ROS
+sudo rosdep init #AB turn on rosdep
+rosdep update  #AB update rosdep
 
 
 
