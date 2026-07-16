@@ -5,7 +5,7 @@
 #---------------------------------------------GET INPUT AND SET GLOBALS---------------------------------------------
 
 
-input_file="${1:?input_file is required}"
+input_file="${1:?input_file is required}" #AB default file for SLAM tuning is at G16://~/Documents/Data/barrows.db3
 color="$2"
 
 if [ -z "$input_file" ]; then #AB If the $input_file variable is empty, then...
@@ -38,7 +38,7 @@ source ~/Apps/lidarslam_ros2/ros2_ws/install/setup.bash
 
 #AB Publish the relevant transforms from the urdf file
 # TODO: [WARN] [1783512779.897357455] [robot_state_publisher]: No robot_description parameter, but command-line argument available.  Assuming argument is name of URDF file.  This backwards compatibility fallback will be removed in the future.
-# TODO: try ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(cat robot.urdf)"
+# TODO: try ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(cat cartographer_config/lidar_robot.urdf)"
 ros2 run robot_state_publisher robot_state_publisher cartographer_config/lidar_robot.urdf &
 
 #AB Launch the SLAM node
