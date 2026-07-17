@@ -42,11 +42,12 @@ source /opt/ros/jazzy/setup.bash #FK source the version of ros
 
 
 #FK 2026-07-08 added the above step to DAI
-sudo apt install python3-colcon-common-extensions -y #AB 2026-06-15 added this installer to DAI
-sudo apt install python3-rosdep -y #AB install rosdep, which I guess doens't come  by default! NB! python3-rosdep2 is only for Debian--python3-rosdep is for Ubuntu 
-#AB 2026-06-15 added the above installer to DAI
-sudo rosdep init #AB turn on rosdep
-rosdep update  #AB update rosdep
+#AB 2026-07-17 added the commented code below to Install_Jazzy.sh
+# sudo apt install python3-colcon-common-extensions -y #AB 2026-06-15 added this installer to DAI
+# sudo apt install python3-rosdep -y #AB install rosdep, which I guess doens't come  by default! NB! python3-rosdep2 is only for Debian--python3-rosdep is for Ubuntu 
+# #AB 2026-06-15 added the above installer to DAI
+# sudo rosdep init #AB turn on rosdep
+# rosdep update  #AB update rosdep
 
 
 
