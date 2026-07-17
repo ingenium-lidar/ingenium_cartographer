@@ -23,8 +23,8 @@ sudo -v #AB prompt for sudo at the beginning, which helps minimize the number of
 
 echo -e "$LIME Updating and upgrading apt repositories...$NC "
 sudo apt update
-sudo apt upgrade
-sudo apt autoremove
+sudo apt upgrade -y
+sudo apt autoremove -y
 
 
 echo -e "$LIME Installing apt packages...$NC "
@@ -33,6 +33,7 @@ sleep 1
 apt_packages=(
     blender                           #AB Install Blender (a 3D modeling software)
     cloudcompare                      #AB Install CloudCompare (a point-cloud processing software)
+    curl                              #AB A tool to interact with the web from the command line. 
     dosfstools                        #AB Install dependency for gparted which lets it work with FAT32 formatting
     firefox                           #AB Install Firefox Web Browser
     gdm-settings                      #AB Another OS customization tool
@@ -45,11 +46,12 @@ apt_packages=(
     libglib2.0-dev-bin                #AB A dependency of gdm-settings (and a lot of other things, too, including gnone-tweaks)
     libpcl-dev                        #AB CLI, API, etc for PCL
     mtools                            #AB Install dependency for gparted which lets it work with FAT32 formatting
+    network-manager                   #AB Install network configuration tool (this is nmcli!)
     net-tools                         #AB includes ifconfig and other useful network configuration tools
     openssh-server                    #AB SSH client
     pcl-tools                         #AB Install pcl ("point cloud library"), used for manipulating point clouds.
-    python3-pip                       #AB Install pip, Python's package manager.
-    python3.12-venv                   #AB Install a package to allow creating python virtual environments
+    # python3-pip                       #AB Install pip, Python's package manager. #AB 2026-07-17... why? And in what environment??? Ubuntu already has this. Commented out.
+    # python3.12-venv                   #AB Install a package to allow creating python virtual environments. #AB 2026-07-17 Does not work; also, unecessary at the present time because as of this writing we don't need venvs for anything.
     rpi-imager                        #AB a tool for burning OSes onto SD cards for use in a Raspberry Pi
     snapd                             #AB A package manager
     sl                                #AB Install sl, an alias for ls
@@ -62,7 +64,7 @@ apt_packages=(
 for package in "${apt_packages[@]}"; do
     echo ""
     echo ">>> Installing: $package"
-    sudo apt install -y "$package"
+    sudo apt install -y "$package" #AB TODO: switch to apt-get and verify that it all still works
 done
 
 
@@ -151,26 +153,6 @@ mv ~/Documents/GitHub/ingenium_cartographer/cartographer_config/.bash_aliases ~ 
 echo -e "$LIME Installing ROS2 Jazzy Jalisco...$NC "
 cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the ingenium_cartographer/agent_scripts directory.
 ./Install_Jazzy.sh #AB Run the Install_Jazzy.sh script to install ROS Jazzy 
-
-
-
-#---------------------------------------------INSTALL ROS-HOSTED APT PACKAGES---------------------------------------------
-
-
-echo -e "$LIME Updating and upgrading apt...$NC "
-sudo apt update && sudo apt upgrade -y
-sleep 1
-
-#AB We install these here and not above with the other apt installs because they require ROS Jazzy to be installed first
-echo -e "$LIME Installing hardware drivers...$NC "
-sudo apt install ros-jazzy-velodyne -y #AB Install the Velodyne driver. It's in a stack hosted (I believe) on the ROS website.
-sudo apt install ros-jazzy-microstrain-inertial-driver -y #AB Install the IMU driver. These drivers are now maintained as part of the built-in ROS package manager! 
-
-echo -e "$LIME Installing Colcon and rosdep...$NC "
-sudo apt install python3-colcon-common-extensions -y #AB Installs both colcon and common extensions for colcon, the ROS build tool.
-sudo apt install python3-rosdep -y                   #AB Install rosdep, a tool for managing dependencies in ROS
-sudo rosdep init #AB turn on rosdep
-rosdep update  #AB update rosdep
 
 
 
