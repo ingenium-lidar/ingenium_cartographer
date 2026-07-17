@@ -63,7 +63,9 @@ sudo apt-get install -y ros-jazzy-rosbag2
 #AB We install these here and not above with the other apt installs because they require ROS Jazzy to be installed first
 echo -e "$LIME Installing hardware drivers...$NC "
 sudo apt-get install ros-jazzy-velodyne -y #AB Install the Velodyne driver. It's in a stack hosted (I believe) on the ROS website.
-sudo apt-get install ros-jazzy-microstrain-inertial-driver -y #AB Install the IMU driver. These drivers are now maintained as part of the built-in ROS package manager! 
+sudo apt-get install ros-jazzy-microstrain-inertial-driver -y #AB Install the IMU driver. These drivers are now maintained as part of the built-in ROS package manager!
+sudo apt-get install ros-jazzy-topic-tools -y #AB Install a wonderful utility that allows relaying topics. Dependency of process.sh
+
 
 echo -e "$LIME Installing Colcon and rosdep...$NC "
 sudo apt-get install python3-colcon-common-extensions -y #AB Installs both colcon and common extensions for colcon, the ROS build tool.
