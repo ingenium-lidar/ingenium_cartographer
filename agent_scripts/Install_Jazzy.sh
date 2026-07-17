@@ -13,30 +13,30 @@ echo -e "$LIME *^* Start of Install_Jazzy.sh$NC "
 
 echo "Updating apt..."
 sleep 1
-sudo apt update
-sudo apt upgrade -y
-sudo apt autoremove -y
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get autoremove -y
 
 echo "Installing universe repository..."
 sleep 1
-sudo apt install -y software-properties-common
+sudo apt-get install -y software-properties-common
 sudo add-apt-repository universe -y
 
 echo "Configuring system..."
 sleep 1
-sudo apt update # && sudo apt install -y curl #AB Moved to DAI 2026-07-17
+sudo apt-get update # && sudo apt install -y curl #AB Moved to DAI 2026-07-17
 export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F\" '{print $4}')
 curl --fail --retry 5 --retry-delay 5 --retry-all-errors --location -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo $UBUNTU_CODENAME)_all.deb" # If using Ubuntu derivates use $UBUNTU_CODENAME
 sudo dpkg -i /tmp/ros2-apt-source.deb
 
 echo "Updating apt a second time..."
 sleep 1
-sudo apt update
-sudo apt upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 
 echo "Installing ros-jazzy-desktop..."
 sleep 1
-sudo apt install -y ros-jazzy-desktop
+sudo apt-get install -y ros-jazzy-desktop
 
 echo "ROS2 Jazzy installation complete."
 sleep 1
@@ -49,7 +49,7 @@ cd $cwd
 
 
 echo -e "$LIME Updating and upgrading apt...$NC "
-sudo apt update && sudo apt upgrade -y
+sudo apt-get update && sudo apt-get upgrade -y
 sleep 1
 
 echo -e "$LIME Installing rosbag2...$NC"
@@ -62,12 +62,12 @@ sudo apt-get install -y ros-jazzy-rosbag2
 
 #AB We install these here and not above with the other apt installs because they require ROS Jazzy to be installed first
 echo -e "$LIME Installing hardware drivers...$NC "
-sudo apt install ros-jazzy-velodyne -y #AB Install the Velodyne driver. It's in a stack hosted (I believe) on the ROS website.
-sudo apt install ros-jazzy-microstrain-inertial-driver -y #AB Install the IMU driver. These drivers are now maintained as part of the built-in ROS package manager! 
+sudo apt-get install ros-jazzy-velodyne -y #AB Install the Velodyne driver. It's in a stack hosted (I believe) on the ROS website.
+sudo apt-get install ros-jazzy-microstrain-inertial-driver -y #AB Install the IMU driver. These drivers are now maintained as part of the built-in ROS package manager! 
 
 echo -e "$LIME Installing Colcon and rosdep...$NC "
-sudo apt install python3-colcon-common-extensions -y #AB Installs both colcon and common extensions for colcon, the ROS build tool.
-sudo apt install python3-rosdep -y                   #AB Install rosdep, a tool for managing dependencies in ROS
+sudo apt-get install python3-colcon-common-extensions -y #AB Installs both colcon and common extensions for colcon, the ROS build tool.
+sudo apt-get install python3-rosdep -y                   #AB Install rosdep, a tool for managing dependencies in ROS
 sudo rosdep init #AB turn on rosdep
 rosdep update  #AB update rosdep
 

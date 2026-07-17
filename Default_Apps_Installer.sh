@@ -22,9 +22,9 @@ sudo -v #AB prompt for sudo at the beginning, which helps minimize the number of
 
 
 echo -e "$LIME Updating and upgrading apt repositories...$NC "
-sudo apt update
-sudo apt upgrade -y
-sudo apt autoremove -y
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get autoremove -y
 
 
 echo -e "$LIME Installing apt packages...$NC "
@@ -64,7 +64,7 @@ apt_packages=(
 for package in "${apt_packages[@]}"; do
     echo ""
     echo ">>> Installing: $package"
-    sudo apt install -y "$package" #AB TODO: switch to apt-get and verify that it all still works
+    sudo apt-get install -y "$package" 
 done
 
 
@@ -231,7 +231,7 @@ gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-blue-dark'
 echo -e "$LIME Cleaning up...$NC "
 
 echo -ne "Running sudo apt autoremove:\n"
-sudo apt autoremove -y #AB Remove all files not needed in the system. Frees up a variable amount of space (on the Jun 24, 2025 reinstall, I had superfluous firmware. You never know...)
+sudo apt-get autoremove -y #AB Remove all files not needed in the system. Frees up a variable amount of space (on the Jun 24, 2025 reinstall, I had superfluous firmware. You never know...)
 
 gsettings set org.gnome.desktop.background picture-uri file:~/Documents/GitHub/ingenium_cartographer/blanchard.png #AB Set the desktop background to blanchard.png from the GitHub.
 
