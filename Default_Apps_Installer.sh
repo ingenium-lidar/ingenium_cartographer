@@ -106,7 +106,6 @@ mkdir ~/Documents/Data
 mkdir ~/Documents/Garbage
 
 mkdir ~/Apps
-mkdir -p ~/Apps/ros2_ws/src
 
 
 cd ~/Documents #AB Clone the RFCS repository, which contains .md files which document work that needs to be done.
