@@ -82,7 +82,7 @@ echo -e "$LIME Installing snap packages...$NC "
 
 snap_classic_packages=(
     gh      #FK install GitHub command line interface
-    emacs   #AB Install emacs, for all the people who know that instead of vim
+    # emacs   #AB Install emacs, for all the people who know that instead of vim #AB 2026-07-17 We can add this back later if there's demand but this is a very very large app to install considering that we have nobody using it right now
     code    #AB Visual Studio Code, a git-integrated IDE for basically all computer languages
 )
 
