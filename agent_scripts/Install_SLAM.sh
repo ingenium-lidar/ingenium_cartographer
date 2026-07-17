@@ -6,7 +6,7 @@
 
 
 #FK For debugging purposes...
-bash ~/Documents/GitHub/ingenium_cartographer/agent_scripts/Uninstall_SLAM.sh #FK clean up any previous installation stuff
+# bash ~/Documents/GitHub/ingenium_cartographer/agent_scripts/Uninstall_SLAM.sh #FK clean up any previous installation stuff
 #FK @TODO remove above line when done with debugging
 #FK @TODO for debugging purposes, use pipes or arrows to save in a file all of the stdout and stderr from running this script
 
