@@ -54,7 +54,7 @@ sleep 1
 
 echo -e "$LIME Installing rosbag2...$NC"
 sleep 1
-sudo apt-get install -y ros-jazzy-rosbag2 &
+sudo apt-get install -y ros-jazzy-rosbag2
 #AB Removed this 2026-07-17 because I think it duplicates python3-colcon-common-extensions
 # echo "Installing colcon..."
 # sleep 1
