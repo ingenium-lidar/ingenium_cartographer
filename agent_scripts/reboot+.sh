@@ -6,6 +6,7 @@ post_reboot_script="$(realpath "$1")"
 post_reboot_cron_file="/etc/cron.d/reboot_plus_cronjob" #JD/AB - This stores the one-shot cron file that will make the the post-reboot script run just one time.
 helper_script="$HOME/.reboot+_helper.sh"
 args_for_next_script=("${@:2}")
+log_file="/var/log/reboot+$(date +%s).log"
 printf -v quoted_args '%q ' "${args_for_next_script[@]}"
 
 #AB Create a blank helper script that the cron job will run after reboot and mark it as executable
@@ -16,7 +17,7 @@ chmod +x "$helper_script"
 sudo rm -f "$post_reboot_cron_file"
 
 #JD/AB - This writes the one-shot cron entry that will invoke the post-reboot script
-echo "@reboot root /bin/bash $helper_script" | sudo tee "$post_reboot_cron_file" > /dev/null #AB This whole pipe/tee/redirect to /dev/null thing is so that we can write with sudo (you can't do `sudo >`)
+echo "@reboot root /bin/bash $helper_script" > "$log_file" 2>&1 | sudo tee "$post_reboot_cron_file" > /dev/null #AB This whole pipe/tee/redirect to /dev/null thing is so that we can write with sudo (you can't do `sudo >`)
 
 #JD - This sets the cron file permissions to the mode required by cron.d.
 sudo chmod 644 "$post_reboot_cron_file"
