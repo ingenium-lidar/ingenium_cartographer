@@ -213,6 +213,10 @@ if [[ "$OMIT_GUI" == 0 ]]; then
 
     #AB Create an empty .wslrc file
     touch $HOME/.wslrc
+
+    #AB Set the desktop background to blanchard.png from the GitHub.
+    gsettings set org.gnome.desktop.background picture-uri file:~/Documents/GitHub/ingenium_cartographer/blanchard.png 
+
 else
     #AB If in a no-GUI dev environment (presumably a WSL one), use the real ~/.wslrc file (adds notify-send that works for Windows)
     cp $HOME/Documents/GitHub/ingenium_cartographer/cartographer_config/.wslrc $HOME
@@ -290,8 +294,6 @@ verbose_echo -e "$LIME Cleaning up...$NC "
 
 verbose_echo -e "Running sudo apt autoremove:"
 sudo apt-get autoremove "${apt_flags[@]}" #AB Remove all files not needed in the system. Frees up a variable amount of space (on the Jun 24, 2025 reinstall, I had superfluous firmware. You never know...)
-
-gsettings set org.gnome.desktop.background picture-uri file:~/Documents/GitHub/ingenium_cartographer/blanchard.png #AB Set the desktop background to blanchard.png from the GitHub.
 
 verbose_echo -e "$LIME Default_Apps_Installer.sh has finished running.$NC "
 
