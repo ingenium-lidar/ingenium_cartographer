@@ -29,7 +29,7 @@ last_color_file="cartographer_config/.last_color_used.txt"
 
 source /opt/ros/jazzy/setup.bash
 source ~/Apps/ndt_omp_ros2/ros2_ws/install/setup.bash
-source ~/Apps/lidarslam_ros2/ros2_ws/install/setup.bash
+source ~/Apps/lidar_slam_ros2/ros2_ws/install/setup.bash
 
 
 
