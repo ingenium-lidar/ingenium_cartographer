@@ -157,6 +157,17 @@ cd ~/Documents/GitHub #AB ...navigate to the ~/Documents/GitHub directory
 git clone https://github.com/ingenium-lidar/ingenium_cartographer.git #AB ...and clone the ingenium_cartographer repository from GitHub
 
 cd ingenium_cartographer #AB Navigate to the newly cloned repository
+
+
+git switch $BRANCH
+if [ "$(git branch --show-current)" = "$BRANCH" ]; then
+    echo "git correctly switched to $BRANCH"
+else
+    echo -e "$RED Failed to switch to the provided branch $BRANCH $NC" >&2
+    exit 3
+fi
+
+
 for file in *; do #AB Iterate through all files within it
     if [[ "$file" == *.sh ]]; then #AB If the file ends in .sh (i.e., if it's a bash script)...
         chmod +x "$file" #AB ...then mark it as executable
@@ -168,15 +179,6 @@ for file in *; do #AB Iterate through all files within it
         done
     fi
 done
-
-
-git switch $BRANCH
-if [ "$(git branch --show-current)" = "$BRANCH" ]; then
-    echo "git correctly switched to $BRANCH"
-else
-    echo -e "$RED Failed to switch to the provided branch $BRANCH $NC" >&2
-    exit 3
-fi
 
 
 mv ~/Documents/GitHub/ingenium_cartographer/cartographer_config/.bash_aliases ~ #AB Move the .bash_aliases file in cartographer_config to the home directory
