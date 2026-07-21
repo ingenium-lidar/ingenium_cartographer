@@ -199,9 +199,9 @@ rm veloview.tar.gz #AB delete the archive previously downloaded
 
 
 echo -e "$LIME Installing lidarslam_ros2...$NC "
-cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the ingenium_cartographer/agent_scripts directory. 
-# ./Install_rsasaki_slam.sh #AB Run the Install_rsasaki_slam.sh script to install lidarslam_ros2 
-echo -e "\e[38;5;196m\033[1m DID NOT RUN SLAM INSTALLER. THE RELEVANT LINE OF CODE HAS BEEN COMMENTED UNTIL THE SCRIPT IS COMPLETE $NC "
+cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts/SLAM #AB Navigate to the ingenium_cartographer/agent_scripts directory. 
+./Install_SLAM.sh #AB Install rsasaki0109's SLAM package. 
+# echo -e "\e[38;5;196m\033[1m DID NOT RUN SLAM INSTALLER. THE RELEVANT LINE OF CODE HAS BEEN COMMENTED UNTIL THE SCRIPT IS COMPLETE $NC "
 
 
 
