@@ -21,6 +21,7 @@ Version: 2.0.0 (2026-07-21)
 
 SYNOPSIS/USAGE
   ./install.sh <-p|--package <name>> [-b|--branch <name>] [-h|--help] [-v|--verbose] [-q|--quiet] [-f|--force] [--version] [--omit-gui]
+  Example: ./install.sh -p dev-jazzy -b rfs-10-installer-refactoring -f -v --omit-gui 2>&1 | tee ~/default_apps_installer_log.txt
 
 DESCRIPTION
   Sets up the Ingenium LiDAR system from scratch on an empty Ubuntu system by automatic script. 
