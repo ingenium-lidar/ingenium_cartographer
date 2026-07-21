@@ -13,21 +13,34 @@ LIME='\e[38;5;82m' #AB format echo text as bright green
 # for code in {0..255}
 #     do echo -e "\e[38;5;${code}m"'\\e[38;5;'"$code"m"\e[0m"
 #   done
+VERBOSITY=$1
+FORCE=$2
+BRANCH=$3
+OMIT_GUI=$4
 
-sudo -v #AB prompt for sudo at the beginning, which helps minimize the number of times sudo is prompted later.
+apt_flags=(); [[ "$FORCE" == "1" ]] && apt_flags+=("-y"); [[ "$VERBOSITY" == "0" ]] && apt_flags+=("-qq")
 
+function verbose_echo() {
+ if [[ "$VERBOSITY" == "2" ]]; then
+    echo "$@"
+ fi
+}
+
+if [[ $FORCE == "1" ]]; then
+    sudo -v #AB prompt for sudo at the beginning, which helps minimize the number of times sudo is prompted later.
+fi
 
 
 #---------------------------------------------INSTALL BASIC PACKAGES---------------------------------------------
 
 
-echo -e "$LIME Updating and upgrading apt repositories...$NC "
-sudo apt-get update
-sudo apt-get upgrade -y
-sudo apt-get autoremove -y
+verbose_echo -e "$LIME Updating and upgrading apt repositories...$NC "
+sudo apt-get update "${apt_flags[@]}"
+sudo apt-get upgrade "${apt_flags[@]}"
+sudo apt-get autoremove "${apt_flags[@]}"
 
 
-echo -e "$LIME Installing apt packages...$NC "
+verbose_echo -e "$LIME Installing apt packages...$NC "
 sleep 1
 
 apt_packages=(
@@ -64,18 +77,18 @@ apt_packages=(
 for package in "${apt_packages[@]}"; do
     echo ""
     echo ">>> Installing: $package"
-    sudo apt-get install -y "$package" 
+    sudo apt-get install "${apt_flags[@]}" "$package" 
 done
 
 
-echo -e "$LIME Configuring git...$NC "
+verbose_echo -e "$LIME Configuring git...$NC "
 
 git config --global user.email "ingenium.lidar@outlook.com"
 git config --global user.name "Ingenium-LiDAR-Admin"
 
 
 
-echo -e "$LIME Installing snap packages...$NC "
+verbose_echo -e "$LIME Installing snap packages...$NC "
 
 #AB Important note! We used to install CloudCompare and Blender via snap before we realized that something about how snap handles graphics on high-end GPUs was causing the apps to crash. Now we use apt instead.
 #AB We also used to snap install firefox, but apt install firefox does the same thing. Now, all of our snaps run with the --classic flag, which gives them permissions that normal snaps don't have.
@@ -98,7 +111,7 @@ done
 #---------------------------------------------CREATE DEFAULT DIRECTORY STRUCTURE---------------------------------------------
 
 
-echo -e "$LIME Creating default directory structure...$NC "
+verbose_echo -e "$LIME Creating default directory structure...$NC "
 
 mkdir ~/Documents
 mkdir ~/Documents/GitHub
@@ -120,7 +133,7 @@ echo -e "# Instructions for Garbage Directory \n\n This directory exists for fil
 #---------------------------------------------INSTALL "ingenium_cartographer" REPOSITORY---------------------------------------------
 
 
-echo -e "$LIME Installing the Ingenium Cartographer repository...$NC "
+verbose_echo -e "$LIME Installing the Ingenium Cartographer repository...$NC "
 if [ -d ~/Documents/GitHub/ingenium_cartographer ]; then #AB If a directory called ingenium_cartographer already exists in ~/Documents/GitHub...
     sudo rm -rfd ~/Documents/GitHub/ingenium_cartographer #AB ...then delete it, along with all of its contents.
 fi
@@ -149,7 +162,7 @@ mv ~/Documents/GitHub/ingenium_cartographer/cartographer_config/.bash_aliases ~ 
 #---------------------------------------------INSTALL ROS2 Jazzy---------------------------------------------
 
 
-echo -e "$LIME Installing ROS2 Jazzy Jalisco...$NC "
+verbose_echo -e "$LIME Installing ROS2 Jazzy Jalisco...$NC "
 cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the ingenium_cartographer/agent_scripts directory.
 ./Install_Jazzy.sh #AB Run the Install_Jazzy.sh script to install ROS Jazzy 
 
@@ -158,7 +171,7 @@ cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the in
 #---------------------------------------------CONFIGURE PORTS AND IP ADDRESSES---------------------------------------------
 
 
-echo -e "$LIME Configuring ports and IP addresses...$NC "
+verbose_echo -e "$LIME Configuring ports and IP addresses...$NC "
 #AB This section rewrites your ethernet IP to be on the same network as the VLP-32C default. If your sensors are not connecting, you're probably on the wrong subnet.
 
 source ~/Documents/GitHub/ingenium_cartographer/agent_scripts/get_ethernet_address.sh #AB Run the get_ethernet_address.sh script to prompt the user for their ethernet port name and store it in a variable called ethernet. 
@@ -169,7 +182,7 @@ nmcli connection add type ethernet ifname $ethernet con-name lidar-puck autoconn
 #---------------------------------------------INSTALL VELOVIEW---------------------------------------------
 
 
-echo -e "$LIME Installing VeloView...$NC "
+verbose_echo -e "$LIME Installing VeloView...$NC "
 cd ~/Apps
 
 #AB Download VeloView 5.1 for Ubuntu from the web. Update this URL if VeloView ever stops working.
@@ -198,7 +211,7 @@ rm veloview.tar.gz #AB delete the archive previously downloaded
 #---------------------------------------------INSTALL SLAM---------------------------------------------
 
 
-echo -e "$LIME Installing lidarslam_ros2...$NC "
+verbose_echo -e "$LIME Installing lidarslam_ros2...$NC "
 cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts/SLAM #AB Navigate to the ingenium_cartographer/agent_scripts directory. 
 ./Install_SLAM.sh #AB Install rsasaki0109's SLAM package. 
 # echo -e "\e[38;5;196m\033[1m DID NOT RUN SLAM INSTALLER. THE RELEVANT LINE OF CODE HAS BEEN COMMENTED UNTIL THE SCRIPT IS COMPLETE $NC "
@@ -208,7 +221,7 @@ cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts/SLAM #AB Navigate to t
 #---------------------------------------------CONFIGURE UI---------------------------------------------
 
 
-echo -e "$LIME Setting system colors to dark mode with blue accents...$NC "
+verbose_echo -e "$LIME Setting system colors to dark mode with blue accents...$NC "
 #AB Set global color scheme to dark mode
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
@@ -227,14 +240,14 @@ gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-blue-dark'
 #---------------------------------------------CLEANUP---------------------------------------------
 
 
-echo -e "$LIME Cleaning up...$NC "
+verbose_echo -e "$LIME Cleaning up...$NC "
 
-echo -ne "Running sudo apt autoremove:\n"
-sudo apt-get autoremove -y #AB Remove all files not needed in the system. Frees up a variable amount of space (on the Jun 24, 2025 reinstall, I had superfluous firmware. You never know...)
+verbose_echo -e "Running sudo apt autoremove:"
+sudo apt-get autoremove "${apt_flags[@]}" #AB Remove all files not needed in the system. Frees up a variable amount of space (on the Jun 24, 2025 reinstall, I had superfluous firmware. You never know...)
 
 gsettings set org.gnome.desktop.background picture-uri file:~/Documents/GitHub/ingenium_cartographer/blanchard.png #AB Set the desktop background to blanchard.png from the GitHub.
 
-echo -e "$LIME Default_Apps_Installer.sh has finished running.$NC "
+verbose_echo -e "$LIME Default_Apps_Installer.sh has finished running.$NC "
 
 cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts
 ./reboot.sh
