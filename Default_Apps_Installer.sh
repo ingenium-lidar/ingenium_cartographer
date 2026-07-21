@@ -4,6 +4,15 @@
 #AB NOTE: This script primarily installs a long series of "developer tools"--things necessary for the project developers (eg. CloudCompare, IDEs), but not necessarily needed on every RPi. To set up a new RPi, see RPi_Default_Apps_Installer.sh
 #AB: This script was most recently run with no fatal errors on April 2 2026
 
+'''
+EXIT CODES
+  0   Success
+  1   General error
+  2   Invalid argument(s)
+  3   Failed to git switch to the correct branch
+'''
+
+
 RED='\033[0;31m' #AB format echo text as red
 NC='\033[0m' #AB format echo text as "no color"
 BOLD_CYAN='\e[1;36m' #AB format echo text as bold cyan
@@ -159,7 +168,15 @@ for file in *; do #AB Iterate through all files within it
         done
     fi
 done
+
+
 git switch $BRANCH
+if [ "$(git branch --show-current)" = "$BRANCH" ]; then
+    echo "git correctly switched to $BRANCH"
+else
+    echo -e "$RED Failed to switch to the provided branch $BRANCH $NC" >&2
+    exit 3
+fi
 
 
 mv ~/Documents/GitHub/ingenium_cartographer/cartographer_config/.bash_aliases ~ #AB Move the .bash_aliases file in cartographer_config to the home directory
