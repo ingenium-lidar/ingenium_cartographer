@@ -1,0 +1,17 @@
+#!/bin/bash
+# chmod-sh-files
+#
+# Ensures every .sh file in the working tree is executable.
+# Intended to be wired up as BOTH `post-checkout` and `post-merge`, since
+# either one alone can miss cases (post-checkout catches branch switches
+# and fresh clones; post-merge catches plain `git pull`).
+#
+# Install (from repo root, once per machine):
+#   git config core.hooksPath .githooks
+#   ln -sf chmod-sh-files .githooks/post-checkout
+#   ln -sf chmod-sh-files .githooks/post-merge
+#   chmod +x .githooks/chmod-sh-files .githooks/post-checkout .githooks/post-merge
+
+set -euo pipefail
+
+find . -name "*.sh" -not -path "./.git/*" -exec chmod +x {} \;

@@ -1,0 +1,47 @@
+#!/bin/bash
+# pre-commit
+#
+# Blocks a commit if it stages a file larger than LFS_MAX_SIZE_MB that
+# isn't already tracked by git-lfs. Meant to catch large files (e.g. .bag
+# recordings, point-cloud dumps) BEFORE they land in history, since removing
+# them after the fact requires a full `git filter-repo` rewrite.
+#
+# Install (from repo root, once per machine):
+#   git config core.hooksPath .githooks
+#   chmod +x .githooks/pre-commit
+#
+# Override the size limit per-commit if needed:
+#   LFS_MAX_SIZE_MB=200 git commit -m "..."
+
+set -euo pipefail
+
+MAX_SIZE_MB="${LFS_MAX_SIZE_MB:-50}"
+MAX_SIZE_BYTES=$((MAX_SIZE_MB * 1024 * 1024))
+
+blocked=0
+
+while IFS= read -r -d '' file; do
+    # Skip files that were deleted in this commit (nothing to check)
+    [ -f "$file" ] || continue
+
+    # Skip files already routed through git-lfs via .gitattributes
+    if git check-attr filter -- "$file" | grep -q "filter: lfs"; then
+        continue
+    fi
+
+    size=$(git cat-file -s ":$file" 2>/dev/null || echo 0)
+
+    if [ "$size" -gt "$MAX_SIZE_BYTES" ]; then
+        size_mb=$((size / 1024 / 1024))
+        echo "BLOCKED: '$file' is ${size_mb}MB, exceeding the ${MAX_SIZE_MB}MB limit." >&2
+        echo "  -> Track it instead with: git lfs track \"$file\"" >&2
+        blocked=1
+    fi
+done < <(git diff --cached --name-only --diff-filter=ACM -z)
+
+if [ "$blocked" -eq 1 ]; then
+    echo "" >&2
+    echo "Commit blocked. Large binaries should go through git-lfs, not raw git." >&2
+    echo "(Set LFS_MAX_SIZE_MB=<n> to adjust the threshold for this commit.)" >&2
+    exit 1
+fi
