@@ -166,6 +166,33 @@ mv ~/Documents/GitHub/ingenium_cartographer/cartographer_config/.bash_aliases ~ 
 
 
 
+#---------------------------------------------CONFIGURE UI---------------------------------------------
+
+
+if [[ "$OMIT_GUI" == 0 ]]; then
+    verbose_echo -e "$LIME Setting system colors to dark mode with blue accents...$NC "
+    #AB Set global color scheme to dark mode
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+
+    #AB Configure Terminal theme
+    UUID=$(gsettings get org.gnome.Terminal.ProfilesList default | tr -d "'") #AB Get the current default Terminal profile ID
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$UUID/ use-theme-colors false
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$UUID/ palette "['#171421', '#C01C28', '#26A269', '#A2734C', '#12488B', '#A347BA', '#2AA1B3', '#D0CFCC', '#5E5C64', '#F66151', '#33DA7A', '#E9AD0C', '#2A7BDE', '#C061CB', '#33C7DE', '#FFFFFF']" #AB set default dark terminal theme colors
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$UUID/ background-color 'rgb(30,30,30)' #AB Set the background and foreground (text) to the default dark colors
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$UUID/ foreground-color 'rgb(208,207,204)'
+
+    #AB Set accent color to blue
+    gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-blue-dark'
+
+    #AB Create an empty .wslrc file
+    touch $HOME/.wslrc
+else;
+    #AB If in a no-GUI dev environment (presumably a WSL one), use the real ~/.wslrc file (adds notify-send that works for Windows)
+    cp $HOME/Documents/GitHub/ingenium_cartographer/cartographer_config/.wslrc $HOME
+    source $HOME/.wslrc
+
+
+
 #---------------------------------------------INSTALL ROS2 Jazzy---------------------------------------------
 
 
@@ -222,25 +249,6 @@ verbose_echo -e "$LIME Installing lidarslam_ros2...$NC "
 cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts/SLAM #AB Navigate to the ingenium_cartographer/agent_scripts directory. 
 ./Install_SLAM.sh #AB Install rsasaki0109's SLAM package. 
 # echo -e "\e[38;5;196m\033[1m DID NOT RUN SLAM INSTALLER. THE RELEVANT LINE OF CODE HAS BEEN COMMENTED UNTIL THE SCRIPT IS COMPLETE $NC "
-
-
-
-#---------------------------------------------CONFIGURE UI---------------------------------------------
-
-
-verbose_echo -e "$LIME Setting system colors to dark mode with blue accents...$NC "
-#AB Set global color scheme to dark mode
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-
-#AB Configure Terminal theme
-UUID=$(gsettings get org.gnome.Terminal.ProfilesList default | tr -d "'") #AB Get the current default Terminal profile ID
-gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$UUID/ use-theme-colors false
-gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$UUID/ palette "['#171421', '#C01C28', '#26A269', '#A2734C', '#12488B', '#A347BA', '#2AA1B3', '#D0CFCC', '#5E5C64', '#F66151', '#33DA7A', '#E9AD0C', '#2A7BDE', '#C061CB', '#33C7DE', '#FFFFFF']" #AB set default dark terminal theme colors
-gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$UUID/ background-color 'rgb(30,30,30)' #AB Set the background and foreground (text) to the default dark colors
-gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$UUID/ foreground-color 'rgb(208,207,204)'
-
-#AB Set accent color to blue
-gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-blue-dark'
 
 
 
