@@ -209,6 +209,7 @@ else
     #AB If in a no-GUI dev environment (presumably a WSL one), use the real ~/.wslrc file (adds notify-send that works for Windows)
     cp $HOME/Documents/GitHub/ingenium_cartographer/cartographer_config/.wslrc $HOME
     source $HOME/.wslrc
+fi
 
 
 
