@@ -2,7 +2,8 @@
 
 #AB Bash script to reinstall all the scripts and apps necessary for the project. Run on a fresh Ubuntu 24.04.* LTS install.
 #AB NOTE: This script primarily installs a long series of "developer tools"--things necessary for the project developers (eg. CloudCompare, IDEs), but not necessarily needed on every RPi. To set up a new RPi, see RPi_Default_Apps_Installer.sh
-#AB: This script was most recently run with no fatal errors on April 2 2026
+#AB: This script was most recently run with no fatal errors on 2026-07-21
+#AB: This script was most recently run with no errors on 2026-07-21
 
 
 # EXIT CODES
