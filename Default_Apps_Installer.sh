@@ -52,6 +52,7 @@ apt_packages=(
     gnome-tweaks                      #AB An OS customization tool
     htop                              #AB Interactive process viewer
     libglib2.0-dev-bin                #AB A dependency of gdm-settings (and a lot of other things, too, including gnone-tweaks)
+    libnotify-bin                     #AB Adds notify-send, a notification utility
     libpcl-dev                        #AB CLI, API, etc for PCL
     network-manager                   #AB Install network configuration tool (this is nmcli!)
     net-tools                         #AB includes ifconfig and other useful network configuration tools
