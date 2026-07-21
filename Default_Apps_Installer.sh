@@ -245,29 +245,31 @@ sleep 1
 #---------------------------------------------INSTALL VELOVIEW---------------------------------------------
 
 
-verbose_echo -e "$LIME Installing VeloView...$NC "
-cd ~/Apps
+if [[ "$OMIT_GUI" == 0 ]]; then
+    verbose_echo -e "$LIME Installing VeloView...$NC "
+    cd ~/Apps
 
-#AB Download VeloView 5.1 for Ubuntu from the web. Update this URL if VeloView ever stops working.
-curl "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.9&type=app&os=Linux&downloadFile=VeloView-5.1.0-Ubuntu18.04-x86_64.tar.gz" --output veloview.tar.gz
-tar -xzf veloview.tar.gz #AB Extract it from the archive. Extracts by default to a directory called VeloView-5.1.0-Ubuntu18.04-x86_64
-chmod +x "VeloView-5.1.0-Ubuntu18.04-x86_64/bin/VeloView" #AB Make the VeloView binary executable
-VELOVIEW_EXEC_PATH="$(pwd)/VeloView-5.1.0-Ubuntu18.04-x86_64/bin/VeloView" #AB Get the absolute path to the executable
+    #AB Download VeloView 5.1 for Ubuntu from the web. Update this URL if VeloView ever stops working.
+    curl "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.9&type=app&os=Linux&downloadFile=VeloView-5.1.0-Ubuntu18.04-x86_64.tar.gz" --output veloview.tar.gz
+    tar -xzf veloview.tar.gz #AB Extract it from the archive. Extracts by default to a directory called VeloView-5.1.0-Ubuntu18.04-x86_64
+    chmod +x "VeloView-5.1.0-Ubuntu18.04-x86_64/bin/VeloView" #AB Make the VeloView binary executable
+    VELOVIEW_EXEC_PATH="$(pwd)/VeloView-5.1.0-Ubuntu18.04-x86_64/bin/VeloView" #AB Get the absolute path to the executable
 
-#AB Create a Desktop entry file for all users linking to the VeloView binary
-sudo bash -c "cat > '/usr/share/applications/veloview.desktop' <<EOF
-[Desktop Entry]
-Version=1.0
-Name=VeloView
-Exec=$VELOVIEW_EXEC_PATH
-Icon=utilities-terminal
-Terminal=false
-Type=Application
-Categories=Graphics;
-EOF"
+    #AB Create a Desktop entry file for all users linking to the VeloView binary
+    sudo bash -c "cat > '/usr/share/applications/veloview.desktop' <<EOF
+    [Desktop Entry]
+    Version=1.0
+    Name=VeloView
+    Exec=$VELOVIEW_EXEC_PATH
+    Icon=utilities-terminal
+    Terminal=false
+    Type=Application
+    Categories=Graphics;
+    EOF"
 
-sudo chmod +x "/usr/share/applications/veloview.desktop" #AB Make the desktop file into an executable
-rm veloview.tar.gz #AB delete the archive previously downloaded
+    sudo chmod +x "/usr/share/applications/veloview.desktop" #AB Make the desktop file into an executable
+    rm veloview.tar.gz #AB delete the archive previously downloaded
+fi
 
 
 
