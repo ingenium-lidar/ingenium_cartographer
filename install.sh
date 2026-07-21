@@ -74,7 +74,7 @@ EOF
 
 
 function dev-jazzy() {
-    wget -O ingenium_lidar_installer.sh "https://raw.githubusercontent.com/ingenium-lidar/ingenium_cartographer/refs/heads/$branch/Default_Apps_Installer.sh"
+    wget --no-cache -O ingenium_lidar_installer.sh "https://raw.githubusercontent.com/ingenium-lidar/ingenium_cartographer/refs/heads/$branch/Default_Apps_Installer.sh"
     chmod +x ingenium_lidar_installer.sh #AB Mark the downloaded script as executable
     ./ingenium_lidar_installer.sh "$1" "$2" "$3" "$4" #AB Run the downloaded script
     rm ingenium_lidar_installer.sh #AB Delete the now obsolete downloaded script
@@ -82,7 +82,7 @@ function dev-jazzy() {
 
 
 function rpi-jazzy() {
-    wget -O ingenium_lidar_installer.sh "https://raw.githubusercontent.com/ingenium-lidar/ingenium_cartographer/refs/heads/$branch/RPi_Default_Apps_Installer.sh"
+    wget --no-cache -O ingenium_lidar_installer.sh "https://raw.githubusercontent.com/ingenium-lidar/ingenium_cartographer/refs/heads/$branch/RPi_Default_Apps_Installer.sh"
     chmod +x ingenium_lidar_installer.sh #AB Mark the downloaded script as executable
     ./ingenium_lidar_installer.sh "$1" "$2" "$3" #AB Run the downloaded script
     rm ingenium_lidar_installer.sh #AB Delete the now obsolete downloaded script
