@@ -164,7 +164,7 @@ mv ~/Documents/GitHub/ingenium_cartographer/cartographer_config/.bash_aliases ~ 
 
 verbose_echo -e "$LIME Installing ROS2 Jazzy Jalisco...$NC "
 cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the ingenium_cartographer/agent_scripts directory.
-./Install_Jazzy.sh #AB Run the Install_Jazzy.sh script to install ROS Jazzy 
+./Install_Jazzy.sh $VERBOSITY $FORCE #AB Run the Install_Jazzy.sh script to install ROS Jazzy 
 
 
 
