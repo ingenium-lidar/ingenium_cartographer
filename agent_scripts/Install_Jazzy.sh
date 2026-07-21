@@ -33,7 +33,7 @@ sudo apt-get autoremove "${apt_flags[@]}"
 verbose_echo "Installing universe repository..."
 sleep 1
 sudo apt-get install "${apt_flags[@]}" software-properties-common
-notify-send "Install_Jazzy.sh: User confirmation required to add universe repository to apt!"
+# notify-send "Install_Jazzy.sh: User confirmation required to add universe repository to apt!"
 sudo add-apt-repository universe -y #AB This line still prompts for user input. Put a notify-send here
 
 verbose_echo "Configuring system..."
