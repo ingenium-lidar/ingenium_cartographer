@@ -44,28 +44,21 @@ verbose_echo -e "$LIME Installing apt packages...$NC "
 sleep 1
 
 apt_packages=(
-    blender                           #AB Install Blender (a 3D modeling software)
-    cloudcompare                      #AB Install CloudCompare (a point-cloud processing software)
     curl                              #AB A tool to interact with the web from the command line. 
     dosfstools                        #AB Install dependency for gparted which lets it work with FAT32 formatting
-    firefox                           #AB Install Firefox Web Browser
-    gdm-settings                      #AB Another OS customization tool
     git                               #AB a version control tool
     git-lfs                           #AB GitHub Large File Storage, an open source extension to help deal with large files in git commits.
     gnome-keyring                     #AB a secure cryptographic library needed by VS Code
     gnome-tweaks                      #AB An OS customization tool
-    gparted                           #AB A partition manager
     htop                              #AB Interactive process viewer
     libglib2.0-dev-bin                #AB A dependency of gdm-settings (and a lot of other things, too, including gnone-tweaks)
     libpcl-dev                        #AB CLI, API, etc for PCL
-    mtools                            #AB Install dependency for gparted which lets it work with FAT32 formatting
     network-manager                   #AB Install network configuration tool (this is nmcli!)
     net-tools                         #AB includes ifconfig and other useful network configuration tools
     openssh-server                    #AB SSH client
     pcl-tools                         #AB Install pcl ("point cloud library"), used for manipulating point clouds.
     # python3-pip                       #AB Install pip, Python's package manager. #AB 2026-07-17... why? And in what environment??? Ubuntu already has this. Commented out.
     # python3.12-venv                   #AB Install a package to allow creating python virtual environments. #AB 2026-07-17 Does not work; also, unecessary at the present time because as of this writing we don't need venvs for anything.
-    rpi-imager                        #AB a tool for burning OSes onto SD cards for use in a Raspberry Pi
     snapd                             #AB A package manager
     sl                                #AB Install sl, an alias for ls
     tree                              #AB A fancy directory structure printer
@@ -81,6 +74,28 @@ for package in "${apt_packages[@]}"; do
 done
 
 
+gui_apt_packages=(
+    blender                           #AB Install Blender (a 3D modeling software)
+    cloudcompare                      #AB Install CloudCompare (a point-cloud processing software)
+    firefox                           #AB Install Firefox Web Browser
+    gdm-settings                      #AB Another OS customization tool
+    gparted                           #AB A partition manager
+    mtools                            #AB Install dependency for gparted which lets it work with FAT32 formatting
+    rpi-imager                        #AB a tool for burning OSes onto SD cards for use in a Raspberry Pi
+)
+
+if [[ $OMIT_GUI == "0" ]]; then
+    for package in "${gui_apt_packages[@]}"; do
+        echo ""
+        echo ">>> Installing: $package"
+        sudo apt-get install "${apt_flags[@]}" "$package" 
+    done
+
+    sudo snap install --classic code
+fi
+
+
+
 verbose_echo -e "$LIME Configuring git...$NC "
 
 git config --global user.email "ingenium.lidar@outlook.com"
@@ -91,20 +106,10 @@ git config --global user.name "Ingenium-LiDAR-Admin"
 verbose_echo -e "$LIME Installing snap packages...$NC "
 
 #AB Important note! We used to install CloudCompare and Blender via snap before we realized that something about how snap handles graphics on high-end GPUs was causing the apps to crash. Now we use apt instead.
-#AB We also used to snap install firefox, but apt install firefox does the same thing. Now, all of our snaps run with the --classic flag, which gives them permissions that normal snaps don't have.
+#AB We also used to snap install firefox, but apt install firefox does the same thing. Now, all of our snaps run with the --classic flag, which gives them permissions that normal snaps don't have.  
+  
+sudo snap install --classic gh #FK install GitHub command line interface
 
-snap_classic_packages=(
-    gh      #FK install GitHub command line interface
-    # emacs   #AB Install emacs, for all the people who know that instead of vim #AB 2026-07-17 We can add this back later if there's demand but this is a very very large app to install considering that we have nobody using it right now
-    code    #AB Visual Studio Code, a git-integrated IDE for basically all computer languages
-)
-
-
-for package in "${snap_classic_packages[@]}"; do
-    echo ""
-    echo ">>> Installing: $package"
-    sudo snap install --classic "$package"
-done
 
 
 
@@ -153,6 +158,7 @@ for file in *; do #AB Iterate through all files within it
         done
     fi
 done
+git switch $BRANCH
 
 
 mv ~/Documents/GitHub/ingenium_cartographer/cartographer_config/.bash_aliases ~ #AB Move the .bash_aliases file in cartographer_config to the home directory
