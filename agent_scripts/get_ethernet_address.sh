@@ -17,7 +17,6 @@ echo "--------------------------------------------------------------------------
 echo -e "$BOLD_CYAN Enter your ethernet port name: $NC"
 if [ -t 0 ]; then
     read -p "> " ethernet < /dev/tty #AB read the user's input from Terminal and store it in a variable called ethernet.
-    exit 0
 else
     ethernet="eth0"
     echo -e "$RED WARNING! Failed to read user input. Defaulting to eth0 $NC" >&2
