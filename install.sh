@@ -127,24 +127,25 @@ done
 
 
 
-echo -e "\e[38;5;196mThis install script will require periodic attention. Please keep an eye on the terminal window and respond to any prompts that may appear. Press enter to acknowledge this message and proceed with the installation.\e[0m"
-sleep 2
-read -r
-
-
 
 if [[ -z "$package" ]]; then
-    echo "--package is required! Printing the help menu..." >&2
-    print_help
-    exit 2
+  echo -e "\e[38;5;196m--package is required! Printing the help menu...\e[0m" >&2
+  print_help
+  exit 2
 
 elif [[ "$package" == "dev-jazzy" ]]; then
-    dev-jazzy "$verbose" "$force" "$branch" "$omit_gui"
+  echo -e "\e[38;5;196mThis install script will require periodic attention. Please keep an eye on the terminal window and respond to any prompts that may appear. Press enter to acknowledge this message and proceed with the installation.\e[0m"
+  sleep 2
+  read -r
+  dev-jazzy "$verbose" "$force" "$branch" "$omit_gui"
 
 elif [[ "$package" == "rpi-jazzy" ]]; then
-    rpi-jazzy "$verbose" "$force" "$branch"
+  echo -e "\e[38;5;196mThis install script will require periodic attention. Please keep an eye on the terminal window and respond to any prompts that may appear. Press enter to acknowledge this message and proceed with the installation.\e[0m"
+  sleep 2
+  read -r
+  rpi-jazzy "$verbose" "$force" "$branch"
 
 elif [[ "$package" == "sl" ]]; then
-    fn_sl
+  fn_sl
     
 fi
