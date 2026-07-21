@@ -20,7 +20,7 @@ sudo apt-get autoremove -y
 echo "Installing universe repository..."
 sleep 1
 sudo apt-get install -y software-properties-common
-sudo add-apt-repository universe -y
+sudo add-apt-repository universe -y #AB This line still prompts for user input. Put a notify-send here
 
 echo "Configuring system..."
 sleep 1
