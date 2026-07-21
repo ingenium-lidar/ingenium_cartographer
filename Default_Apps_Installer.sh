@@ -158,12 +158,6 @@ git clone https://github.com/ingenium-lidar/ingenium_cartographer.git #AB ...and
 
 cd ingenium_cartographer #AB Navigate to the newly cloned repository
 
-#AB Set up git hooks that block accidental uploads of 50+MB and make all .sh files executable automatically
-git config core.hooksPath .githooks
-ln -sf chmod-sh-files .githooks/post-checkout
-ln -sf chmod-sh-files .githooks/post-merge
-chmod +x .githooks/chmod-sh-files .githooks/post-checkout .githooks/post-merge .githooks/pre-commit
-
 
 git switch $BRANCH
 if [ "$(git branch --show-current)" = "$BRANCH" ]; then
@@ -172,6 +166,14 @@ else
     echo -e "$RED Failed to switch to the provided branch $BRANCH $NC" >&2
     exit 3
 fi
+
+
+#AB Set up git hooks that block accidental uploads of 50+MB and make all .sh files executable automatically
+git config core.hooksPath .githooks
+ln -sf chmod-sh-files .githooks/post-checkout
+ln -sf chmod-sh-files .githooks/post-merge
+chmod +x .githooks/chmod-sh-files .githooks/post-checkout .githooks/post-merge .githooks/pre-commit
+
 
 
 for file in *; do #AB Iterate through all files within it
