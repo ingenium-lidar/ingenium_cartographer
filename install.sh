@@ -10,6 +10,9 @@ package=""
 branch="main"
 version="2.0.0" #AB Remember: versions go major.minor.patch
 
+# This file at the dev branch is located at
+#  wget https://raw.githubusercontent.com/ingenium-lidar/ingenium_cartographer/refs/heads/rfs-10-installer-refactoring/install.sh
+# ./install.sh -p dev-jazzy -b rfs-10-installer-refactoring -f -v --omit-gui 2>&1 | tee ~/default_apps_installer_log.txt
 
 function print_help() { #AB This function prints the help text
     cat << 'EOF'
