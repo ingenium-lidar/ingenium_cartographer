@@ -192,6 +192,10 @@ done
 
 mv ~/Documents/GitHub/ingenium_cartographer/cartographer_config/.bash_aliases ~ #AB Move the .bash_aliases file in cartographer_config to the home directory
 
+verbose_echo -e "$LIME Configuring SSH...$NC "
+cd $HOME/Documents/GitHub/ingenium_cartographer/agent_scripts
+./ssh_config.sh
+
 
 
 #---------------------------------------------CONFIGURE UI---------------------------------------------
