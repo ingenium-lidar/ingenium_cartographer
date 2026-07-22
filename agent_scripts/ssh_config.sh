@@ -11,12 +11,14 @@ touch $HOME/.ssh/config
 cat >> ~/.ssh/config <<'EOF'
 Host 10.42.0.1
     User lidar
+    IdentityFile ~/.ssh/id_ed25519_lidar
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
     LogLevel ERROR
 
 Host 10.42.0.1
     User ubuntu
+    IdentityFile ~/.ssh/id_ed25519_lidar
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
     LogLevel ERROR
@@ -24,3 +26,5 @@ EOF
 
 #AB restrict edit permissions (SSH requires this, apparently)
 chmod 600 $HOME/.ssh/config
+
+ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_lidar -N "" 
