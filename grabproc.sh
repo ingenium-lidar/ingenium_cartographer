@@ -10,7 +10,18 @@ run_slam=0
 ssh_loc="lidar@10.42.0.1"
 
 
+
 function parse_args() {
+  #######################################
+  # Parses arguments passed to the file.
+  # Exits 0 on help and 2 on unexpected argument.
+  # Globals:
+  #   run_slam
+  #   ssh_loc
+  # Outputs:
+  #   Writes errors to STDERR
+  #   Edits globals as appropriate
+  #######################################
   
   PARSED=$(getopt -o hs --long help,SLAM,ssh: -n "$0" -- "$@") || { print_help; exit 2; }
   eval set -- "$PARSED"
@@ -24,25 +35,53 @@ function parse_args() {
       *) echo "Unexpected option: $1" >&2; print_help; exit 2 ;;
     esac
   done
-
 }
 
 
+
 function print_help() {
+  #######################################
+  # Prints the help menu.
+  #######################################
 
     cat << 'EOF'
 ----------------------------HELP PAGE FOR grabproc.sh----------------------------
 
 grabproc.sh - A script to automatically copy data files from an RPi to a main computer and (optionally) SLAM them. 
 License: GPL-3.0
-Version: 2.0.0 (2026-07-21)
+Version: 0.0.1 (2026-07-23)
+
+Usage:
+  `./grabproc.sh [-h|--help] [-s|--SLAM] [--ssh <username>@<ip_address>]
+
+Details:
+  Use -h or --help to print this text and exit the program.
+  Use -s or --SLAM to request that the program SLAM all .mcap or .db3 files copied over from the RPi
+  Use --ssh to specify a host and ip other than the default (lidar@10.42.0.2)
+
+NB:
+  Remember to be connected to the RPi's hotspot before running this. 
 
 ---------------------------------------------------------------------------------
 EOF
 }
 
 
+
 function ssh_send() {
+  #######################################
+  # Runs a Bash function on the remote device
+  # Globals:
+  #   ssh_loc
+  # Arguments:
+  #   $1 - command to be run on the remote in the format "<function_name> [args]"
+  # Outputs:
+  #   Writes errors to STDERR
+  # Returns:
+  #   255 if on SSH connection error
+  #   ? error code of the command passed if that failed
+  #   output of the called function
+  #######################################
 
   local cmd="$1"               #AB Get parameter passed to the function. "commannd" is apparently a Bash builtin
   local func_name="${cmd%% *}" #AB Extract just the function name (before first space) for typeset
@@ -60,7 +99,17 @@ function ssh_send() {
 }
 
 
+
 function get_Documents_Data_TLDs() {
+  #######################################
+  # Gets the names of all the directories in ~/Documents/Data that match the pattern "YYYY-MM-DD/"
+  # Arguments:
+  #   $1 - name of the computer the function is being run on. Must be either "main" (ie local) or "rpi" (ie remote)
+  # Outputs:
+  #   Writes a \n-separated list to $output_file (generated from the computer name and the data)
+  # Returns:
+  #   The path of the output file relative to . 
+  #######################################
 
   local computer_name=$1 #AB must be either "main" or "rpi"
   local output_file="${computer_name}_extant_data_directories_$(date "+%F_%H:%M").txt"
@@ -86,7 +135,18 @@ function get_Documents_Data_TLDs() {
 }
 
 
+
 function compare_directory_list_files() {
+  #######################################
+  # Compares two files full of directory names and returns a list of all the ones in the first not in the second
+  # Arguments:
+  #   $1 - path to the list of matching directories on the remote machine
+  #   $2 - path to the list of matching directories on the local machine
+  # Outputs:
+  #   Writes difference to $output_file (computed using the date)
+  # Returns:
+  #   Filepath of the output file, relative to .
+  #######################################
 
     #AB Set up variables
     local rpi_list_file="$1"
@@ -125,7 +185,15 @@ function compare_directory_list_files() {
 }
 
 
+
 function zip_specified_directories() {
+  #######################################
+  # Compresses the specified directories to zip files
+  # Arguments:
+  #   $1 - a file containing \n-separated names of directories which are to be compressed
+  # Outputs:
+  #   1 zip file per line in the input file
+  #######################################
 
   local directories_to_zip_file=$1
   local dirs_to_zip # Array
@@ -142,13 +210,32 @@ function zip_specified_directories() {
 }
 
 
+
 function CD_RoM() {
+  #######################################
+  # Goes to ~/Documents/Data and deletes what you specify there
+  # Arguments:
+  #   $@ - anything you want to pass to rm
+  #######################################
 
   cd ~/Documents/Data && rm "$@"
 }
 
 
+
 function copy_zips_to_local() {
+  #######################################
+  # Copies zip files of specified names to a local device and verifies them by checksum
+  # Globals:
+  #   ssh_loc
+  # Arguments:
+  #   $1 - file containing a \n-separated list of the zip files which are to be moved, without the .zip extension
+  # Outputs:
+  #   Copies zip files to the local://~/Documents/Data
+  #   Deletes both the zip file and the directory it was generated from on the remote
+  # Returns:
+  #   ? error code of rsync if that is not 0
+  #######################################
 
   local zips_file=$1
   local zips_array
@@ -168,7 +255,17 @@ function copy_zips_to_local() {
 }
 
 
+
 function extract_and_record_zips() {
+  #######################################
+  # Extracts zip files specified in a file passed to the function and records their names in a hidden file
+  # Arguments:
+  #   $1 - a file containing a \n-separated list of zip files to be unzipped (without the .zip extension)
+  # Outputs:
+  #   Writes errors to STDERR
+  #   Appends the names of all files in the read array to a .transferred file, whose name is computed using the date
+  #   1 extracted directory for each zip file present whose name is in the original file
+  #######################################
 
     local zips_file=$1
     local cwd=$(pwd)
@@ -193,23 +290,41 @@ function extract_and_record_zips() {
 }
 
 
-function run_SLAM() {
 
-    local zips_file=$1
+function run_SLAM() {
+  #######################################
+  # Runs process.sh on every file in any subdirectory of the passed directories with a .mcap or .db3 extension.
+  # Arguments:
+  #   $1 - a file containing a \n-separated list of directories in whose subdirectories to search for raw data files
+  # Outputs:
+  #   The output of process.sh
+  #######################################
+
+    local day_dirs_file=$1
     local cwd=$(pwd)
-    local zips_array
-    readarray -t zips_array < "$zips_file"
+    local day_dirs_array
+    readarray -t day_dirs_array < "$day_dirs_file"
     cd ~/Documents/Data
 
-    for filename in "${zips_array[@]}"; do
-      ~/Documents/GitHub/ingenium_cartographer/process.sh "$filename"
+    for filename in "${day_dirs_array[@]}"; do
+      ~/Documents/GitHub/ingenium_cartographer/process.sh "$HOME/Documents/Data$filename/*/*.mcap"
+      ~/Documents/GitHub/ingenium_cartographer/process.sh "$HOME/Documents/Data$filename/*/*.db3"
     done
 
     cd "$cwd"
 }
 
 
+
 function main(){
+  #######################################
+  # Runs a Bash function on the remote device
+  # Globals:
+  #   ssh_loc
+  #   run_slam
+  # Returns:
+  #   A batch of files copied from the remote and processed according to the params passed to the file
+  #######################################
 
   #AB Declare local variables
   local local_dir_list_file
@@ -218,6 +333,7 @@ function main(){
   local cwd=$(pwd)
 
   #AB Copy the appropriate files over from the RPi (remote) to the main (local) device.
+
   parse_args                                                                    #AB Parse script input
   remote_dir_list_file=$(ssh_send "get_Documents_Data_TLDs 'rpi'")              #AB Make a list of directories in remote://~/Documents/Data/ that follow the YYYY-MM-DD pattern. This variable stores the filename
   scp "${ssh_loc}:${HOME}/Documents/Data/$remote_dir_list_file" "${HOME}/Documents/Data/"   #AB Move that file to local://~/Documents/Data/. This is a reversal of the pattern suggested in the RFS (which wanted the local SCP'd to the remote), but on actually writing the code, this method dramatically simplifies things, improving code quality without altering functionality
@@ -235,7 +351,6 @@ function main(){
   fi
 
   echo "${BOLD_CYAN}grabproc.sh has finished running!${NC}"
-
 }
 
 
