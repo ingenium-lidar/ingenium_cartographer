@@ -156,8 +156,8 @@ function copy_zips_to_local() {
   readarray -t zips_array < "$zips_file"
 
   for filename in "${zips_array[@]}"; do
-      rsync -avzc "$ssh_loc:~/Documents/Data/${filename}.zip" "~/Documents/Data/" #AB Note that rsync with -c handles checksum verification automatically! Yay!
-      local rsync_error_code=$?
+      rsync -avzc "${ssh_loc}:${HOME}/Documents/Data/${filename}.zip" "${HOME}/Documents/Data/" #AB Note that rsync with -c handles checksum verification automatically! Yay!
+      rsync_error_code=$?
       if [[ $rsync_error_code -eq 0 ]]; then #AB If the transfer worked, delete the file that was transferred
         ssh_send "CD_RoM -rfd $filename"
         ssh_send "CD_RoM ${filename}.zip"
