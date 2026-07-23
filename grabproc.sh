@@ -158,9 +158,10 @@ function copy_zips_to_local() {
 
   for filename in "${zips_array[@]}"; do
       rsync -avzc "$ssh_loc:~/Documents/Data/${filename}.zip" "~/Documents/Data/" #AB Note that rsync with -c handles checksum verification automatically! Yay!
-      rsync_error_code=$?
+      local rsync_error_code=$?
       if [[ $rsync_error_code -eq 0 ]]; then #AB If the transfer worked, delete the file that was transferred
-        ssh_send "CD_RoM $filename"
+        ssh_send "CD_RoM -rfd $filename"
+        ssh_send "CD_RoM ${filename}.zip"
       else
         echo "${RED}Failed to transfer $filename. rsync exited with code $rsync_error_code!${NC}" >&2
       fi
@@ -168,7 +169,27 @@ function copy_zips_to_local() {
 }
 
 
+function extract_and_record_zips() {
+    local zips_file=$1
+    local cwd=$(pwd)
+    local zips_array
+    readarray -t zips_array < "$zips_file"
+    local transfer_record=".transferred-$(date "+%F")"
 
+    cd ~/Documents/Data
+    touch "$transfer_record"
+    for filename in "${zips_array[@]}"; do
+      unzip "$filename" "${filename}.zip"
+      local unzip_error_code=$?
+      if [[ $unzip_error_code -eq 0 ]]; then #AB If the extraction worked, delete the original .zip file
+        rm "${filename}.zip"
+      else
+        echo "${RED}Failed to extract $filename. unzip exited with code $unzip_error_code!${NC}" >&2
+      fi
+      echo "$filename" >> "$transfer_record"
+    done
+    
+}
 
 
 function main(){
