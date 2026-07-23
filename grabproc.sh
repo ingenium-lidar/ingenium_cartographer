@@ -175,7 +175,7 @@ function copy_zips_to_local() {
 
 
 function extract_and_record_zips() {
-  
+
     local zips_file=$1
     local cwd=$(pwd)
     local zips_array
@@ -195,6 +195,23 @@ function extract_and_record_zips() {
       echo "$filename" >> "$transfer_record"
     done
     
+    cd cwd
+}
+
+
+function run_SLAM() {
+
+    local zips_file=$1
+    local cwd=$(pwd)
+    local zips_array
+    readarray -t zips_array < "$zips_file"
+    cd ~/Documents/Data
+
+    for filename in "${zips_array[@]}"; do
+      ~/Documents/GitHub/ingenium_cartographer/process.sh $filename
+    done
+
+    cd "$cwd"
 }
 
 
@@ -215,8 +232,15 @@ function main(){
   difference_file=$(compare_directory_list_files "$remote_dir_list_file" "$local_dir_list_file") #AB Get the name of a file just created in ~/Documents/Data (since that's where the function ran) containing the data directories on the remote (RPi) that are not on the local (main) device.
   scp "$difference_file" "${ssh_loc}:~/Documents/Data/"                         #AB move the difference file over to the RPi
   ssh_send "zip_specified_directories ~/Documents/Data/$difference_file"        #AB On the RPi, zip all the directories in the difference file (that is, all the directories which exist only on the RPi/remote and not on the G16/main computer/local)
-  copy_zips_to_local "~/Documents/Data/$difference_file" 
-  
+  copy_zips_to_local "~/Documents/Data/$difference_file"                        #AB Use rsync (like scp, but slower and more reliable) to copy the remote zips to the local device and remove them from the remote
+  extract_and_record_zips "$difference_file"                                    #AB Extract the transported zips and record their existence
+
+  #AB If the run_slam option has been enabled, run SLAM!
+  if [[ -z run_slam ]]; then
+    run_SLAM $difference_file
+  fi
+
+  echo "${BOLD_CYAN}grabproc.sh has finished running!${NC}"
 
 }
 
