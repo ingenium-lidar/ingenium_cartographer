@@ -15,7 +15,7 @@ else
 fi
 
 
-save_path=~/Documents/Data/$(date +%F)/"$grid_id"_RAW_$(date +%F_%H:%M)
+save_path=~/Documents/Data/$(date +%F)/"$grid_id"_$(date +%F_%H:%M)/"$grid_id"_RAW_$(date +%F_%H:%M)
 echo -e "\e[1;36mSaving file to $save_path\033[0m"
 
 #AB Publish a static transform from the base frame to the IMU frame of reference. 
@@ -51,7 +51,7 @@ sleep 1
 echo -e "\e[1;36mCurrently recording, press enter to exit\033[0m"
 read -r #AB Wait for an input of any key, then proceed to cleanup
 
-# ./cleanup.sh #AB This  automatically moves all directories starting with "rosbag2_" to the /Documents/Data directory, and creates that directory if it does not exist.
+
 
 pkill -f ros2 && pkill -f microstrain && pkill -f launch && pkill -f rviz2 #AB forcefully kill ALL ROS2 processes to prevent ghost proceeses from continuing.
 sleep 1
