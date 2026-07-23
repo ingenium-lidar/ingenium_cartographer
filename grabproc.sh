@@ -29,6 +29,7 @@ function parse_args() {
 
 
 function print_help() {
+
     cat << 'EOF'
 ----------------------------HELP PAGE FOR grabproc.sh----------------------------
 
@@ -42,6 +43,7 @@ EOF
 
 
 function ssh_send() {
+
   local cmd="$1"               #AB Get parameter passed to the function. "commannd" is apparently a Bash builtin
   local func_name="${cmd%% *}" #AB Extract just the function name (before first space) for typeset
   local output
@@ -130,6 +132,7 @@ function compare_directory_list_files() {
 
 
 function zip_specified_directories() {
+
   local directories_to_zip_file=$1
   local dirs_to_zip # Array
   readarray -t dirs_to_zip < "$directories_to_zip_file"
@@ -146,11 +149,13 @@ function zip_specified_directories() {
 
 
 function CD_RoM() {
+
   cd ~/Documents/Data && rm "$@"
 }
 
 
 function copy_zips_to_local() {
+
   local zips_file=$1
   local zips_array
   local rsync_error_code
@@ -170,6 +175,7 @@ function copy_zips_to_local() {
 
 
 function extract_and_record_zips() {
+  
     local zips_file=$1
     local cwd=$(pwd)
     local zips_array
