@@ -106,6 +106,7 @@ echo "${underscore_sliced[3]}" > /dev/null                                # 0.mc
 
 
 output_dir="${HOME}/Documents/Data/${daystamp}/${grid_id}/${grid_id}_RAW-SLAM_${timestamp}"
+echo "output_dir = $output_dir"
 mkdir "$output_dir"
 
 mv map.pcd "${output_dir}/${grid_id}_RAW-SLAM_${timestamp}.pcd"
