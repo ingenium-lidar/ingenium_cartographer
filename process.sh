@@ -5,22 +5,24 @@
 #---------------------------------------------GET INPUT AND SET GLOBALS---------------------------------------------
 
 
-input_file="${1:?input_file is required}" #AB default file for SLAM tuning is at G16://~/Documents/Data/barrows.db3
+input_file="${1:?input_file is required}"                                 # ../..//Data/2026-07-23/92/92_RAW_1784823750_0.mcap
 color="$2"
+last_color_file="cartographer_config/.last_color_used.txt"
+
 
 if [ -z "$input_file" ]; then #AB If the $input_file variable is empty, then...
-  echo "Usage: $0 <input_db3> [color]"
-  exit 1
+  echo "Usage: $0 <input_mcap> [color]"
+  exit 2
 fi
 
-input_file="$(realpath "$input_file")"
+input_file="$(realpath "$input_file")"                                    # /home/lidar/Documents/Data/2026-07-23/92/92_RAW_1784823750_0.mcap
 if [ ! -f "$input_file" ]; then #AB If $input_file is not a file, then...
   echo "Input file not found: $input_file"
-  exit 1
+  exit 2
 fi
 
-output_dir_name="$(basename -s .db3 "$input_file")" #AB That is, the name of the file, but not its path, and not its .db3 extension
-last_color_file="cartographer_config/.last_color_used.txt"
+
+#AB default file for SLAM tuning is at G16://~/Documents/Data/barrows.db3
 
 
 
@@ -74,15 +76,32 @@ ros2 service call /map_save std_srvs/Empty
 #---------------------------------------------MOVE FILES TO APPROPRIATE LOCATION---------------------------------------------
 
 
-#AB Note that these are a temporary measure, and do not necessarily comply with the Default Filesystem Standard.
-mkdir -p ~/Documents/Data/$output_dir_name
+#AB Slice the path meticulously into little blocks                        # /home/lidar/Documents/Data/2026-07-23/92/92_RAW_1784823750_0.mcap
+IFS='/' read -ra slash_sliced <<< "$input_file"
+echo "${slash_sliced[0]}" > /dev/null                                     # home
+echo "${slash_sliced[1]}" > /dev/null                                     # lidar
+echo "${slash_sliced[2]}" > /dev/null                                     # Documents
+echo "${slash_sliced[3]}" > /dev/null                                     # Data
+daystamp="${slash_sliced[4]}"                                             # 2026-07-23
+grid_id="${slash_sliced[5]}"                                              # 92  
+base_file_name="${slash_sliced[6]}"                                       # 92_RAW_1784823750_0.mcap
 
-mv map.pcd ~/Documents/Data/$output_dir_name/map.pcd
-mv map_projector_info.yaml ~/Documents/Data/$output_dir_name/map_projector_info.yaml
-mv pose_graph.g2o ~/Documents/Data/$output_dir_name/pose_graph.g2o
-mv pointcloud_map/ ~/Documents/Data/$output_dir_name/pointcloud_map/
+IFS='_' read -ra underscore_sliced <<< "$base_file_name"
+echo "${underscore_sliced[0]}" > /dev/null                                # 92
+processing_stage="${underscore_sliced[1]}"                                # RAW
+timestamp="${underscore_sliced[2]}"                                       # 1784823750
+echo "${underscore_sliced[3]}" > /dev/null                                # 0.mcap
 
-echo "Map saved to ~/Documents/Data/$output_dir_name/map.pcd"
+
+
+output_dir="${HOME}/Documents/Data/${daystamp}/${grid_id}/${grid_id}_RAW-SLAM_${timestamp}"
+
+mv map.pcd "${output_dir}/${grid_id}_RAW-SLAM_${timestamp}.pcd"
+mv map_projector_info.yaml "${output_dir}/${grid_id}_RAW-SLAM_${timestamp}_map_projector_info.yaml"
+mv pose_graph.g2o "${output_dir}/${grid_id}_RAW-SLAM_${timestamp}_pose_graph.g2o"
+mv pointcloud_map/ "${output_dir}/${grid_id}_RAW-SLAM_${timestamp}_pointcloud_map/"
+
+echo "Map saved to ${output_dir}"
 
 
 
@@ -109,7 +128,7 @@ else #AB If there _is_ a color parameter, just roll with that
 fi
 
 #AB Convert the g2o file to a poly file
-~/Documents/GitHub/SLAM_testing/tools/g2o-to-poly.py ~/Documents/Data/$output_dir_name/pose_graph.g2o ~/Documents/Data/$output_dir_name/pose_graph.poly
+~/Documents/GitHub/SLAM_testing/tools/g2o-to-poly.py "$output_dir"/pose_graph.g2o "$output_dir"/pose_graph.poly
 
 #AB Convert the pcd file to a ply file of different color than the previous two
-~/Documents/GitHub/SLAM_testing/tools/pcd-to-colored-ply.py ~/Documents/Data/$output_dir_name/map.pcd "$new_color"
+~/Documents/GitHub/SLAM_testing/tools/pcd-to-colored-ply.py "$output_dir"/map.pcd "$new_color"
