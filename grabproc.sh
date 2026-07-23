@@ -220,17 +220,17 @@ function main(){
   #AB Copy the appropriate files over from the RPi (remote) to the main (local) device.
   parse_args                                                                    #AB Parse script input
   remote_dir_list_file=$(ssh_send "get_Documents_Data_TLDs 'rpi'")              #AB Make a list of directories in remote://~/Documents/Data/ that follow the YYYY-MM-DD pattern. This variable stores the filename
-  scp "${ssh_loc}:~/Documents/Data/$remote_dir_list_file" "~/Documents/Data/"   #AB Move that file to local://~/Documents/Data/. This is a reversal of the pattern suggested in the RFS (which wanted the local SCP'd to the remote), but on actually writing the code, this method dramatically simplifies things, improving code quality without altering functionality
+  scp "${ssh_loc}:${HOME}/Documents/Data/$remote_dir_list_file" "${HOME}/Documents/Data/"   #AB Move that file to local://~/Documents/Data/. This is a reversal of the pattern suggested in the RFS (which wanted the local SCP'd to the remote), but on actually writing the code, this method dramatically simplifies things, improving code quality without altering functionality
   local_dir_list_file=$(get_Documents_Data_TLDs 'main')                         #AB Make a list of directories in  local://~/Documents/Data/ that follow the YYYY-MM-DD pattern. This variable stores the filename
   cd ~/Documents/Data
   difference_file=$(compare_directory_list_files "$remote_dir_list_file" "$local_dir_list_file") #AB Get the name of a file just created in ~/Documents/Data (since that's where the function ran) containing the data directories on the remote (RPi) that are not on the local (main) device.
-  scp "$difference_file" "${ssh_loc}:~/Documents/Data/"                         #AB move the difference file over to the RPi
-  ssh_send "zip_specified_directories ~/Documents/Data/$difference_file"        #AB On the RPi, zip all the directories in the difference file (that is, all the directories which exist only on the RPi/remote and not on the G16/main computer/local)
-  copy_zips_to_local "~/Documents/Data/$difference_file"                        #AB Use rsync (like scp, but slower and more reliable) to copy the remote zips to the local device and remove them from the remote
+  scp "$difference_file" "${ssh_loc}:${HOME}/Documents/Data/"                   #AB move the difference file over to the RPi
+  ssh_send "zip_specified_directories ${HOME}/Documents/Data/$difference_file"  #AB On the RPi, zip all the directories in the difference file (that is, all the directories which exist only on the RPi/remote and not on the G16/main computer/local)
+  copy_zips_to_local "${HOME}/Documents/Data/$difference_file"                  #AB Use rsync (like scp, but slower and more reliable) to copy the remote zips to the local device and remove them from the remote
   extract_and_record_zips "$difference_file"                                    #AB Extract the transported zips and record their existence
 
   #AB If the run_slam option has been enabled, run SLAM!
-  if [[ -z run_slam ]]; then
+  if [[ "$run_slam" -eq 1 ]]; then
     run_SLAM $difference_file
   fi
 
