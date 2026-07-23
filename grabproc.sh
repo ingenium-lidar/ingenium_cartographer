@@ -160,6 +160,9 @@ function main(){
   local_dir_list_file=$(get_Documents_Data_TLDs 'main')                         #AB Make a list of directories in  local://~/Documents/Data/ that follow the YYYY-MM-DD pattern. This variable stores the filename
   cd ~/Documents/Data
   difference_file=$(compare_directory_list_files "$remote_dir_list_file" "$local_dir_list_file") #AB Get the name of a file just created in ~/Documents/Data (since that's where the function ran) containing the data directories on the remote (RPi) that are not on the local (main) device.
+  scp "$difference_file" "${ssh_loc}:~/Documents/Data/"                         #AB move the difference file over to the RPi
+  ssh_send "zip_specified_directories ~/Documents/Data/$difference_file"        #AB On the RPi, zip all the directories in the difference file (that is, all the directories which exist only on the RPi/remote and not on the G16/main computer/local)
+  
 
 }
 
