@@ -179,7 +179,7 @@ function extract_and_record_zips() {
     cd ~/Documents/Data
     touch "$transfer_record"
     for filename in "${zips_array[@]}"; do
-      unzip "$filename" "${filename}.zip"
+      unzip "${filename}.zip"
       local unzip_error_code=$?
       if [[ $unzip_error_code -eq 0 ]]; then #AB If the extraction worked, delete the original .zip file
         rm "${filename}.zip"
@@ -189,7 +189,7 @@ function extract_and_record_zips() {
       echo "$filename" >> "$transfer_record"
     done
     
-    cd cwd
+    cd "$cwd"
 }
 
 
