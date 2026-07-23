@@ -73,6 +73,17 @@ ros2 service call /map_save std_srvs/Empty
 
 
 
+# FUZZ CODE FOR TESTING PURPOSES
+touch map.pcd
+touch map_projector_info.yaml
+touch pose_graph.g2o
+mkdir pointcloud_map/
+touch pointcloud_map/a.pcd
+touch pointcloud_map/b.pcd
+touch pointcloud_map/c.pcd
+
+
+
 #---------------------------------------------MOVE FILES TO APPROPRIATE LOCATION---------------------------------------------
 
 
@@ -95,6 +106,7 @@ echo "${underscore_sliced[3]}" > /dev/null                                # 0.mc
 
 
 output_dir="${HOME}/Documents/Data/${daystamp}/${grid_id}/${grid_id}_RAW-SLAM_${timestamp}"
+mkdir "$output_dir"
 
 mv map.pcd "${output_dir}/${grid_id}_RAW-SLAM_${timestamp}.pcd"
 mv map_projector_info.yaml "${output_dir}/${grid_id}_RAW-SLAM_${timestamp}_map_projector_info.yaml"
