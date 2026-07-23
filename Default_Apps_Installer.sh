@@ -22,9 +22,10 @@ sudo -v #AB prompt for sudo at the beginning, which helps minimize the number of
 
 
 echo -e "$LIME Updating and upgrading apt repositories...$NC "
-sudo apt update
-sudo apt upgrade
-sudo apt autoremove
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get autoremove -y
+
 
 echo -e "$LIME Installing apt packages...$NC "
 sleep 1
@@ -32,6 +33,7 @@ sleep 1
 apt_packages=(
     blender                           #AB Install Blender (a 3D modeling software)
     cloudcompare                      #AB Install CloudCompare (a point-cloud processing software)
+    curl                              #AB A tool to interact with the web from the command line. 
     dosfstools                        #AB Install dependency for gparted which lets it work with FAT32 formatting
     firefox                           #AB Install Firefox Web Browser
     gdm-settings                      #AB Another OS customization tool
@@ -44,13 +46,12 @@ apt_packages=(
     libglib2.0-dev-bin                #AB A dependency of gdm-settings (and a lot of other things, too, including gnone-tweaks)
     libpcl-dev                        #AB CLI, API, etc for PCL
     mtools                            #AB Install dependency for gparted which lets it work with FAT32 formatting
+    network-manager                   #AB Install network configuration tool (this is nmcli!)
     net-tools                         #AB includes ifconfig and other useful network configuration tools
     openssh-server                    #AB SSH client
     pcl-tools                         #AB Install pcl ("point cloud library"), used for manipulating point clouds.
-    python3-pip                       #AB Install pip, Python's package manager.
-    python3.12-venv                   #AB Install a package to allow creating python virtual environments
-    python3-colcon-common-extensions  #AB Install colcon, the ROS build tool.
-    python3-rosdep                    #AB Install rosdep, a tool for managing dependencies in ROS
+    # python3-pip                       #AB Install pip, Python's package manager. #AB 2026-07-17... why? And in what environment??? Ubuntu already has this. Commented out.
+    # python3.12-venv                   #AB Install a package to allow creating python virtual environments. #AB 2026-07-17 Does not work; also, unecessary at the present time because as of this writing we don't need venvs for anything.
     rpi-imager                        #AB a tool for burning OSes onto SD cards for use in a Raspberry Pi
     snapd                             #AB A package manager
     sl                                #AB Install sl, an alias for ls
@@ -63,7 +64,7 @@ apt_packages=(
 for package in "${apt_packages[@]}"; do
     echo ""
     echo ">>> Installing: $package"
-    sudo apt install -y "$package"
+    sudo apt-get install -y "$package" 
 done
 
 
@@ -81,7 +82,7 @@ echo -e "$LIME Installing snap packages...$NC "
 
 snap_classic_packages=(
     gh      #FK install GitHub command line interface
-    emacs   #AB Install emacs, for all the people who know that instead of vim
+    # emacs   #AB Install emacs, for all the people who know that instead of vim #AB 2026-07-17 We can add this back later if there's demand but this is a very very large app to install considering that we have nobody using it right now
     code    #AB Visual Studio Code, a git-integrated IDE for basically all computer languages
 )
 
@@ -105,7 +106,6 @@ mkdir ~/Documents/Data
 mkdir ~/Documents/Garbage
 
 mkdir ~/Apps
-mkdir -p ~/Apps/ros2_ws/src
 
 
 cd ~/Documents #AB Clone the RFCS repository, which contains .md files which document work that needs to be done.
@@ -155,20 +155,6 @@ cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the in
 
 
 
-#---------------------------------------------INSTALL HARDWARE DRIVERS---------------------------------------------
-
-
-echo -e "$LIME Updating and upgrading apt...$NC "
-sudo apt update && sudo apt upgrade -y
-sleep 1
-
-#AB We install these here and not above with the other apt installs because they require ROS Jazzy to be installed first
-echo -e "$LIME Installing hardware drivers...$NC "
-sudo apt install ros-jazzy-velodyne -y #AB Install the Velodyne driver. It's in a stack hosted (I believe) on the ROS website.
-sudo apt install ros-jazzy-microstrain-inertial-driver -y #AB Install the IMU driver. These drivers are now maintained as part of the built-in ROS package manager! 
-
-
-
 #---------------------------------------------CONFIGURE PORTS AND IP ADDRESSES---------------------------------------------
 
 
@@ -213,9 +199,9 @@ rm veloview.tar.gz #AB delete the archive previously downloaded
 
 
 echo -e "$LIME Installing lidarslam_ros2...$NC "
-cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts #AB Navigate to the ingenium_cartographer/agent_scripts directory. 
-# ./Install_rsasaki_slam.sh #AB Run the Install_rsasaki_slam.sh script to install lidarslam_ros2 
-echo -e "\e[38;5;196m\033[1m DID NOT RUN SLAM INSTALLER. THE RELEVANT LINE OF CODE HAS BEEN COMMENTED UNTIL THE SCRIPT IS COMPLETE $NC "
+cd ~/Documents/GitHub/ingenium_cartographer/agent_scripts/SLAM #AB Navigate to the ingenium_cartographer/agent_scripts directory. 
+./Install_SLAM.sh #AB Install rsasaki0109's SLAM package. 
+# echo -e "\e[38;5;196m\033[1m DID NOT RUN SLAM INSTALLER. THE RELEVANT LINE OF CODE HAS BEEN COMMENTED UNTIL THE SCRIPT IS COMPLETE $NC "
 
 
 
@@ -244,7 +230,7 @@ gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-blue-dark'
 echo -e "$LIME Cleaning up...$NC "
 
 echo -ne "Running sudo apt autoremove:\n"
-sudo apt autoremove -y #AB Remove all files not needed in the system. Frees up a variable amount of space (on the Jun 24, 2025 reinstall, I had superfluous firmware. You never know...)
+sudo apt-get autoremove -y #AB Remove all files not needed in the system. Frees up a variable amount of space (on the Jun 24, 2025 reinstall, I had superfluous firmware. You never know...)
 
 gsettings set org.gnome.desktop.background picture-uri file:~/Documents/GitHub/ingenium_cartographer/blanchard.png #AB Set the desktop background to blanchard.png from the GitHub.
 
