@@ -40,7 +40,7 @@ sleep 1
 
 
 echo -e "\e[1;36mRecording lidar and imu data...\033[0m"
-ros2 bag record -o $save_path --storage sqlite3 /imu/data /velodyne_packets & #AB Record the /velodyne_packets and /imu/data topics
+ros2 bag record -o $save_path --storage mcap /imu/data /velodyne_packets & #AB Record the /velodyne_packets and /imu/data topics
 sleep 1
 
 
