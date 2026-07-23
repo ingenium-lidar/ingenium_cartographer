@@ -137,11 +137,25 @@ function zip_specified_directories() {
 
   cd ~/Documents/Data
   #AB Loop through all the directories in the file passed to the function and zip them all
-  for filename in "${rpi_list[@]}"; do
+  for filename in "${dirs_to_zip[@]}"; do
       zip "${filename}.zip" "$filename"
   done
 
   cd $cwd
+}
+
+function copy_zips_to_local() {
+  zips_file=$1
+  local zips_array
+  local rsync_error_code
+  readarray -t zips_array < "$zips_file"
+
+  for filename in "${zips_array[@]}"; do
+      rsync -avzc "$ssh_loc:~/Documents/Data/${filename}.zip" "~/Documents/Data/" #AB Note that rsync with -c handles checksum verification automatically! Yay!
+      rsync_error_code=$?
+  done
+
+  
 }
 
 
