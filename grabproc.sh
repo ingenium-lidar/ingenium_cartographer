@@ -129,6 +129,20 @@ function compare_directory_list_files() {
 }
 
 
+function zip_specified_directories() {
+  local directories_to_zip_file=$1
+  local dirs_to_zip # Array
+  readarray -t dirs_to_zip < "$directories_to_zip_file"
+  cwd=$(pwd)
+
+  cd ~/Documents/Data
+  #AB Loop through all the directories in the file passed to the function and zip them all
+  for filename in "${rpi_list[@]}"; do
+      zip "${filename}.zip" "$filename"
+  done
+
+  cd $cwd
+}
 
 
 function main(){
