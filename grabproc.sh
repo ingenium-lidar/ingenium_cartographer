@@ -133,7 +133,7 @@ function zip_specified_directories() {
   local directories_to_zip_file=$1
   local dirs_to_zip # Array
   readarray -t dirs_to_zip < "$directories_to_zip_file"
-  cwd=$(pwd)
+  local cwd=$(pwd)
 
   cd ~/Documents/Data
   #AB Loop through all the directories in the file passed to the function and zip them all
@@ -144,8 +144,14 @@ function zip_specified_directories() {
   cd $cwd
 }
 
+
+function CD_RoM() {
+  cd ~/Documents/Data && rm "$@"
+}
+
+
 function copy_zips_to_local() {
-  zips_file=$1
+  local zips_file=$1
   local zips_array
   local rsync_error_code
   readarray -t zips_array < "$zips_file"
@@ -153,10 +159,16 @@ function copy_zips_to_local() {
   for filename in "${zips_array[@]}"; do
       rsync -avzc "$ssh_loc:~/Documents/Data/${filename}.zip" "~/Documents/Data/" #AB Note that rsync with -c handles checksum verification automatically! Yay!
       rsync_error_code=$?
+      if [[ $rsync_error_code -eq 0 ]]; then #AB If the transfer worked, delete the file that was transferred
+        ssh_send "CD_RoM $filename"
+      else
+        echo "${RED}Failed to transfer $filename. rsync exited with code $rsync_error_code!${NC}" >&2
+      fi
   done
-
-  
 }
+
+
+
 
 
 function main(){
@@ -176,6 +188,7 @@ function main(){
   difference_file=$(compare_directory_list_files "$remote_dir_list_file" "$local_dir_list_file") #AB Get the name of a file just created in ~/Documents/Data (since that's where the function ran) containing the data directories on the remote (RPi) that are not on the local (main) device.
   scp "$difference_file" "${ssh_loc}:~/Documents/Data/"                         #AB move the difference file over to the RPi
   ssh_send "zip_specified_directories ~/Documents/Data/$difference_file"        #AB On the RPi, zip all the directories in the difference file (that is, all the directories which exist only on the RPi/remote and not on the G16/main computer/local)
+  copy_zips_to_local "~/Documents/Data/$difference_file" 
   
 
 }
