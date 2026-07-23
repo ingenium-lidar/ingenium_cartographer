@@ -2,6 +2,8 @@
 
 #AB Run on a clean Ubuntu Server 24.04.2 LTS system
 #AB This script has been majorly updated since it was last tested from scratch. Please verify functionality and report bugs to the other devs.
+#AB In order for grabproc.sh and similar scripts to work as expected, when setting up a new RPi, run this command from each control computer: (DAI must have previously run on the control computer!)
+#   ssh-copy-id -i ~/.ssh/id_ed25519_lidar lidar@10.42.0.1
 
 
 #---------------------------------------------UPDATE THE SYSTEM AND INSTALL PACKAGES---------------------------------------------
