@@ -65,8 +65,8 @@ function get_Documents_Data_TLDs() {
   local computer_name=$1 #AB must be either "main" or "rpi"
   local output_file="${computer_name}_extant_data_directories_$(date "+%F_%H:%M").txt"
   local cwd=$(pwd)
-  cd $HOME/Documents/Data #AB This is default filesystem, so we can assume it exists
-  touch $output_file #AB Create an output file
+  cd "$HOME/Documents/Data" #AB This is default filesystem, so we can assume it exists
+  touch "$output_file" #AB Create an output file
 
   shopt -s nullglob #AB Set *s to not interpret literally if ~/Documents/Data is empty
 
@@ -75,13 +75,13 @@ function get_Documents_Data_TLDs() {
   for dir in "${dirs[@]}"; do                                 #AB Loop through all the directories in the dirs array
       dir="${dir%/}"                                          #AB Strip the trailing slash
       if [[ "$dir" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then   #AB Big nasty RegExp. Basically, it says "if directory is of the pattern ####-##-## where #s are numbers and - is a literal -"
-          echo "$dir" >> $output_file                         #AB Append each matching directory name from dirs to the output file, each on its own line
+          echo "$dir" >> "$output_file"                         #AB Append each matching directory name from dirs to the output file, each on its own line
       fi
   done
 
   shopt -u nullglob #AB Set *s to interpret normally in future
 
-  cd $cwd #AB Return to where the program was at the start of the function
+  cd "$cwd" #AB Return to where the program was at the start of the function
   echo "$output_file"
 }
 
@@ -138,7 +138,7 @@ function zip_specified_directories() {
       zip -r "${filename}.zip" "$filename"
   done
 
-  cd $cwd
+  cd "$cwd"
 }
 
 
@@ -159,7 +159,7 @@ function copy_zips_to_local() {
       rsync -avzc "${ssh_loc}:${HOME}/Documents/Data/${filename}.zip" "${HOME}/Documents/Data/" #AB Note that rsync with -c handles checksum verification automatically! Yay!
       rsync_error_code=$?
       if [[ $rsync_error_code -eq 0 ]]; then #AB If the transfer worked, delete the file that was transferred
-        ssh_send "CD_RoM -rfd $filename"
+        ssh_send "CD_RoM -rf $filename"
         ssh_send "CD_RoM ${filename}.zip"
       else
         echo "${RED}Failed to transfer $filename. rsync exited with code $rsync_error_code!${NC}" >&2
@@ -202,7 +202,7 @@ function run_SLAM() {
     cd ~/Documents/Data
 
     for filename in "${zips_array[@]}"; do
-      ~/Documents/GitHub/ingenium_cartographer/process.sh $filename
+      ~/Documents/GitHub/ingenium_cartographer/process.sh "$filename"
     done
 
     cd "$cwd"
@@ -231,7 +231,7 @@ function main(){
 
   #AB If the run_slam option has been enabled, run SLAM!
   if [[ "$run_slam" -eq 1 ]]; then
-    run_SLAM $difference_file
+    run_SLAM "$difference_file"
   fi
 
   echo "${BOLD_CYAN}grabproc.sh has finished running!${NC}"
