@@ -135,7 +135,7 @@ function zip_specified_directories() {
   cd ~/Documents/Data
   #AB Loop through all the directories in the file passed to the function and zip them all
   for filename in "${dirs_to_zip[@]}"; do
-      zip "${filename}.zip" "$filename"
+      zip -r "${filename}.zip" "$filename"
   done
 
   cd $cwd
