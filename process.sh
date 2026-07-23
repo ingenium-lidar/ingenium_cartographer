@@ -90,26 +90,26 @@ touch pointcloud_map/c.pcd
 #AB Slice the path meticulously into little blocks                        # /home/lidar/Documents/Data/2026-07-23/92/92_RAW_1784823750_0.mcap
 IFS='/' read -ra slash_sliced <<< "$input_file"
 echo "Printing slash slices..."
-echo "${slash_sliced[0]}"                                      # home
-echo "${slash_sliced[1]}"                                 # lidar
-echo "${slash_sliced[2]}"                                   # Documents
-echo "${slash_sliced[3]}"                                   # Data
-echo "${slash_sliced[4]}" 
-daystamp="${slash_sliced[5]}"                                             # 2026-07-23     / Data
-grid_id="${slash_sliced[6]}"                                              # 92  
-base_file_name="${slash_sliced[7]}"                                       # 92_RAW_1784823750_0.mcap
+echo "${slash_sliced[1]}"                                                 # home
+echo "${slash_sliced[2]}"                                 # lidar
+echo "${slash_sliced[3]}"                                   # Documents
+echo "${slash_sliced[4]}"                                   # Data
+echo "${slash_sliced[5]}" 
+daystamp="${slash_sliced[6]}"                                             # 2026-07-23     / Data
+grid_id="${slash_sliced[7]}"                                              # 92  
+base_file_name="${slash_sliced[8]}"                                       # 92_RAW_1784823750_0.mcap
 echo $daystamp
 echo $grid_id
 echo $base_file_name
 
 echo "Printing underscore slices..."
 IFS='_' read -ra underscore_sliced <<< "$base_file_name"
-echo "${underscore_sliced[0]}"                                # 92
-processing_stage="${underscore_sliced[1]}"                                # RAW
-timestamp="${underscore_sliced[2]}"                                       # 1784823750
+echo "${underscore_sliced[1]}"                                # 92
+processing_stage="${underscore_sliced[2]}"                                # RAW
+timestamp="${underscore_sliced[3]}"                                       # 1784823750
 echo $processing_stage
 echo $timestamp
-echo "${underscore_sliced[3]}"                                # 0.mcap
+echo "${underscore_sliced[4]}"                                # 0.mcap
 
 # output_dir = /home/lidar/Documents/Data/Data/2026-07-23/2026-07-23_RAW-SLAM_
 
