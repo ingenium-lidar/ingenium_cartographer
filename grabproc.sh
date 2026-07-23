@@ -62,27 +62,21 @@ function ssh_send() {
 
 function get_Documents_Data_TLDs() {
 
-  computer_name=$1 #AB must be either "main" or "rpi"
-  cwd=$(pwd)
+  local computer_name=$1 #AB must be either "main" or "rpi"
+  local output_file="${computer_name}_extant_data_directories_$(date "+%F_%H:%M").txt"
+  local cwd=$(pwd)
   cd $HOME/Documents/Data #AB This is default filesystem, so we can assume it exists
+  touch $output_file #AB Create an output file
 
   shopt -s nullglob #AB Set *s to not interpret literally if ~/Documents/Data is empty
 
-  dirs=(*/) #AB Get a list of all directories in current location (~/Documents/Data)
-  data_dirs=() #AB Make an empty list. It will contain only directories matching the pattern "YYYY-MM-DD/"
-
+  local dirs=(*/) #AB Get a list of all directories in current location (~/Documents/Data)
+ 
   for dir in "${dirs[@]}"; do                                 #AB Loop through all the directories in the dirs array
       dir="${dir%/}"                                          #AB Strip the trailing slash
       if [[ "$dir" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then   #AB Big nasty RegExp. Basically, it says "if directory is of the pattern ####-##-## where #s are numbers and - is a literal -"
-          data_dirs+=("$dir")
+          echo "$dir" >> $output_file                         #AB Append each matching directory name from dirs to the output file, each on its own line
       fi
-  done
-
-  output_file="${computer_name}_extant_data_directories_$(date "+%F_%H:%M").txt"
-  touch $output_file #AB Create an output file
-  #AB Append each directory name from data_dirs to the output file, each on its own line
-  for d in "${data_dirs[@]}"; do
-      echo "$d" >> $output_file 
   done
 
   shopt -u nullglob #AB Set *s to interpret normally in future
@@ -108,11 +102,11 @@ function compare_directory_list_files() {
 
     #AB Associate each hashed directory name from main_list with the value "1"
     for filename in "${main_list[@]}"; do
-        in_array2["$filename"]=1
+        in_main_list["$filename"]=1
     done
 
     # --- Compute the difference: items in array1 but NOT in array2 ------------
-    difference=()
+    local difference=() #AB Define a difference array
 
     #AB Loop through all the dirnames in rpi_list
     for filename in "${rpi_list[@]}"; do
