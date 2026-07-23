@@ -75,6 +75,7 @@ apt_packages=(
     tree                              #AB A fancy directory structure printer
     vim                               #AB Install vim, _the_ standard text editor for Terminal (if not the most user friendly)
     yamllint                          #AB a tool to check the syntax of YAML files
+    zip                               #AB An archive manager
 )
 
 

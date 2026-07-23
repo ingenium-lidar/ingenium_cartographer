@@ -19,6 +19,7 @@ sudo apt install -y net-tools #AB add another utility for managing networks
 sudo apt-get install -y git #AB install git, just in case it is not already installed
 sudo apt install -y yamllint #AB a tool to check the syntax of YAML files
 sudo apt install -y sl #AB Install sl, an alias for ls
+sudo apt install -y zip #AB Install zip, an archive manager
 
 
 #---------------------------------------------INSTALL INGENIUM CARTOGRAPHER REPOSITORY---------------------------------------------
