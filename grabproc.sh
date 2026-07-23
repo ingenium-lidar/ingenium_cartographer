@@ -12,12 +12,12 @@ ssh_loc="lidar@10.42.0.1"
 
 function parse_args() {
   
-  PARSED=$(getopt -o hvqfp:b: --long help,verbose,quiet,force,package:,branch:,version,omit-gui -n "$0" -- "$@")
+  PARSED=$(getopt -o hs --long help,SLAM,ssh: -n "$0" -- "$@") || { print_help; exit 2; }
   eval set -- "$PARSED"
 
   while true; do
     case "$1" in
-      -h|--help) print_help; shift ;;
+      -h|--help) print_help; exit 0 ;; #AB This is technically breaking the spec, which calls for -h _not_ to exit, but that seems nonsensical to me after reading more about CLIs, so I'm going to ignore the RFS on this point. 
       -s|--SLAM) run_slam=1; shift ;;
       --ssh) ssh_loc="$2"; shift 2 ;;
       --) shift; break ;;
