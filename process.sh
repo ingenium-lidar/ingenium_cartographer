@@ -91,12 +91,13 @@ ros2 service call /map_save std_srvs/Empty
 #---------------------------------------------MOVE FILES TO APPROPRIATE LOCATION---------------------------------------------
 
 
-#AB Slice the path meticulously into little blocks                        # /home/lidar/Documents/Data/2026-07-23/92/92_RAW_1784823750_0.mcap
+#AB Slice the path meticulously into little blocks                        # /home/lidar/Documents/Data/2026/2026-07-23/92/92_RAW_1784823750_0.mcap
 IFS='/' read -ra slash_sliced <<< "$input_file"
-daystamp="${slash_sliced[5]}"                                             # 2026-07-23
-grid_id="${slash_sliced[6]}"                                              # 92
-mcap_savedir_name="${slash_sliced[7]}"                                    # 92_RAW_1784823750  
-base_mcap_name="${slash_sliced[8]}"                                       # 92_RAW_1784823750_0.mcap
+yearstamp="${slash_sliced[5]}"                                            # 2026
+daystamp="${slash_sliced[6]}"                                             # 2026-07-23
+grid_id="${slash_sliced[7]}"                                              # 92
+mcap_savedir_name="${slash_sliced[8]}"                                    # 92_RAW_1784823750  
+base_mcap_name="${slash_sliced[9]}"                                       # 92_RAW_1784823750_0.mcap
 
 IFS='_' read -ra underscore_sliced <<< "$base_mcap_name"
 processing_stage="${underscore_sliced[1]}"                                # RAW
@@ -104,7 +105,7 @@ timestamp="${underscore_sliced[2]}"                                       # 1784
 
 
 #AB Assemble the appropriate output path from the sliced pieces
-output_dir="${HOME}/Documents/Data/${daystamp}/${grid_id}/${grid_id}_RAW-SLAM_${timestamp}"
+output_dir="${HOME}/Documents/Data/${yearstamp}/${daystamp}/${grid_id}/${grid_id}_RAW-SLAM_${timestamp}"
 mkdir "$output_dir"
 
 #AB Move all files created by SLAM to the appropriate locations, renaming them as necessary
@@ -140,8 +141,8 @@ else #AB If there _is_ a color parameter, just roll with that
     new_color="$color"
 fi
 
-#AB Convert the g2o file to a poly file
-~/Documents/GitHub/SLAM_testing/tools/g2o-to-poly.py "$output_dir"/pose_graph.g2o "$output_dir"/pose_graph.poly
+# #AB Convert the g2o file to a poly file
+# ~/Documents/GitHub/SLAM_testing/tools/g2o-to-poly.py "$output_dir"/pose_graph.g2o "$output_dir"/pose_graph.poly
 
-#AB Convert the pcd file to a ply file of different color than the previous two
-~/Documents/GitHub/SLAM_testing/tools/pcd-to-colored-ply.py "$output_dir"/map.pcd "$new_color"
+# #AB Convert the pcd file to a ply file of different color than the previous two
+# ~/Documents/GitHub/SLAM_testing/tools/pcd-to-colored-ply.py "$output_dir"/map.pcd "$new_color"

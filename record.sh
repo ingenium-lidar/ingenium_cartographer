@@ -15,7 +15,7 @@ else
 fi
 
 
-save_path=~/Documents/Data/$(date +%F)/"$grid_id"/"$grid_id"_RAW_$(date +%s)
+save_path=~/Documents/Data/$(date +%Y)/$(date +%F)/"$grid_id"/"$grid_id"_RAW_$(date +%s)
 echo -e "\e[1;36mSaving file to $save_path\033[0m"
 
 #AB Publish a static transform from the base frame to the IMU frame of reference. 
