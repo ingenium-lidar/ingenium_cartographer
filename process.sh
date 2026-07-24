@@ -89,6 +89,7 @@ touch pointcloud_map/c.pcd
 #---------------------------------------------MOVE FILES TO APPROPRIATE LOCATION---------------------------------------------
 
 
+# mkdir: cannot create directory ‘pointcloud_map/’: File exists
 # Printing slash slices...
 # home
 # lidar
@@ -110,38 +111,53 @@ touch pointcloud_map/c.pcd
 # mv: cannot move 'pose_graph.g2o' to '/home/lidar/Documents/Data/92/92_RAW_1784823750/92_RAW_1784823750_RAW-SLAM_0.mcap/92_RAW_1784823750_RAW-SLAM_0.mcap_pose_graph.g2o': No such file or directory
 # mv: cannot move 'pointcloud_map/' to '/home/lidar/Documents/Data/92/92_RAW_1784823750/92_RAW_1784823750_RAW-SLAM_0.mcap/92_RAW_1784823750_RAW-SLAM_0.mcap_pointcloud_map/': No such file or directory
 # Map saved to /home/lidar/Documents/Data/92/92_RAW_1784823750/92_RAW_1784823750_RAW-SLAM_0.mcap
-# ./process.sh: line 152: /home/lidar/Documents/GitHub/SLAM_testing/tools/g2o-to-poly.py: No such file or directory
-# ./process.sh: line 155: /home/lidar/Documents/GitHub/SLAM_testing/tools/pcd-to-colored-ply.py: No such file or directory
+# ./process.sh: line 184: /home/lidar/Documents/GitHub/SLAM_testing/tools/g2o-to-poly.py: No such file or directory
+# ./process.sh: line 187: /home/lidar/Documents/GitHub/SLAM_testing/tools/pcd-to-colored-ply.py: No such file or directory
+# lidar@Abraham-PC:~/Documents/GitHub/ingenium_cartographer$
 
 
 
 
 
+# Printing slash slices...
+# home
+# lidar
+# Documents
+# Data
+# 2026-07-23
+# 92
+# 92_RAW_1784823750
+# 92_RAW_1784823750_0.mcap
 
+# Printing underscore slices...
+# RAW
+# 1784823750
+# 0.mcap
 
 #AB Slice the path meticulously into little blocks                        # /home/lidar/Documents/Data/2026-07-23/92/92_RAW_1784823750_0.mcap
 IFS='/' read -ra slash_sliced <<< "$input_file"
 echo "Printing slash slices..."
-echo "${slash_sliced[1]}"                                                 # home
-echo "${slash_sliced[2]}"                                                 # lidar
-echo "${slash_sliced[3]}"                                                 # Documents
-echo "${slash_sliced[4]}"                                                 # Data
-echo "${slash_sliced[5]}" 
-daystamp="${slash_sliced[6]}"                                             # 2026-07-23     / Data
-grid_id="${slash_sliced[7]}"                                              # 92  
-base_file_name="${slash_sliced[8]}"                                       # 92_RAW_1784823750_0.mcap
+echo "${slash_sliced[1]}" > /dev/null                                     # home
+echo "${slash_sliced[2]}" > /dev/null                                     # lidar
+echo "${slash_sliced[3]}" > /dev/null                                     # Documents
+echo "${slash_sliced[4]}" > /dev/null                                     # Data
+daystamp="${slash_sliced[5]}"                                             # 2026-07-23
+grid_id="${slash_sliced[6]}"                                              # 92
+mcap_savedir_name="${slash_sliced[7]}"                                    # 92_RAW_1784823750  
+base_mcap_name="${slash_sliced[8]}"                                       # 92_RAW_1784823750_0.mcap
 echo $daystamp
 echo $grid_id
+echo $mcap_savedir_name
 echo $base_file_name
 
 echo "Printing underscore slices..."
 IFS='_' read -ra underscore_sliced <<< "$base_file_name"
-echo "${underscore_sliced[1]}"                                            # 92
-processing_stage="${underscore_sliced[2]}"                                # RAW
-timestamp="${underscore_sliced[3]}"                                       # 1784823750
+echo "${underscore_sliced[0]}"                                            # 92
+processing_stage="${underscore_sliced[1]}"                                # RAW
+timestamp="${underscore_sliced[2]}"                                       # 1784823750
 echo $processing_stage
 echo $timestamp
-echo "${underscore_sliced[4]}"                                            # 0.mcap
+echo "${underscore_sliced[3]}"                                            # 0.mcap
 
 # output_dir = /home/lidar/Documents/Data/Data/2026-07-23/2026-07-23_RAW-SLAM_
 
