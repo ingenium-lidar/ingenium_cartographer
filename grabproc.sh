@@ -102,7 +102,7 @@ function ssh_send() {
 
 function get_Documents_Data_TLDs() {
   #######################################
-  # Gets the names of all the directories in ~/Documents/Data that match the pattern "YYYY-MM-DD/"
+  # Gets the names of all the directories in ~/Documents/Data that match the pattern "/*/YYYY-MM-DD/"
   # Arguments:
   #   $1 - name of the computer the function is being run on. Must be either "main" (ie local) or "rpi" (ie remote)
   # Outputs:
@@ -119,13 +119,16 @@ function get_Documents_Data_TLDs() {
 
   shopt -s nullglob #AB Set *s to not interpret literally if ~/Documents/Data is empty
 
-  local dirs=(*/) #AB Get a list of all directories in current location (~/Documents/Data)
- 
-  for dir in "${dirs[@]}"; do                                 #AB Loop through all the directories in the dirs array
-      dir="${dir%/}"                                          #AB Strip the trailing slash
-      if [[ "$dir" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then   #AB Big nasty RegExp. Basically, it says "if directory is of the pattern ####-##-## where #s are numbers and - is a literal -"
-          echo "$dir" >> "$output_file"                         #AB Append each matching directory name from dirs to the output file, each on its own line
-      fi
+  local dirs=(*/)                                                       #AB top-level year dirs, e.g. "2026/"
+  for year_dir in "${dirs[@]}"; do
+      local date_dirs=("${year_dir}"*/)                                 #AB day dirs, eg. "2026-07-24"
+      for dir in "${date_dirs[@]}"; do
+          dir="${dir%/}"                                                #AB "2026/2026-07-24"
+          local date_only="${dir#"$year_dir"}"                          #AB "2026-07-24" for the regex check
+          if [[ "$date_only" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+              echo "$dir" >> "$output_file"                             #AB write "2026/2026-07-24" 
+          fi
+      done
   done
 
   shopt -u nullglob #AB Set *s to interpret normally in future
@@ -243,7 +246,9 @@ function copy_zips_to_local() {
   readarray -t zips_array < "$zips_file"
 
   for filename in "${zips_array[@]}"; do
-      rsync -avzc "${ssh_loc}:${HOME}/Documents/Data/${filename}.zip" "${HOME}/Documents/Data/" #AB Note that rsync with -c handles checksum verification automatically! Yay!
+      local dest_path="${HOME}/Documents/Data/${filename}.zip"
+      mkdir -p "$(dirname "$dest_path")"
+      rsync -avzc "${ssh_loc}:${HOME}/Documents/Data/${filename}.zip" "$dest_path" #AB Note that rsync with -c handles checksum verification automatically! Yay!
       rsync_error_code=$?
       if [[ $rsync_error_code -eq 0 ]]; then #AB If the transfer worked, delete the file that was transferred
         ssh_send "CD_RoM -rf $filename"
@@ -283,7 +288,7 @@ function extract_and_record_zips() {
       else
         echo "${RED}Failed to extract $filename. unzip exited with code $unzip_error_code!${NC}" >&2
       fi
-      echo "$filename" >> "$transfer_record"
+      echo "$filename" >> "$transfer_record" #AB We're recording whether the .zip made it, not whether the zip extracted or not. 
     done
     
     cd "$cwd"
@@ -300,15 +305,17 @@ function run_SLAM() {
   #   The output of process.sh
   #######################################
 
+  #AB Example of a filepath conforming to DFS R4:
+  #   /home/lidar/Documents/Data/2026/2026-07-24/94/94_RAW_1784885704/94_RAW_1784885704_0.mcap
+
     local day_dirs_file=$1
     local cwd=$(pwd)
     local day_dirs_array
     readarray -t day_dirs_array < "$day_dirs_file"
     cd ~/Documents/Data
 
-    for filename in "${day_dirs_array[@]}"; do
-      ~/Documents/GitHub/ingenium_cartographer/process.sh "$HOME/Documents/Data$filename/*/*.mcap"
-      ~/Documents/GitHub/ingenium_cartographer/process.sh "$HOME/Documents/Data$filename/*/*.db3"
+    for filename in "${day_dirs_array[@]}"; do #AB filename covers 2026/2026-07-24/ in this examle
+      ~/Documents/GitHub/ingenium_cartographer/process.sh "$HOME/Documents/Data/$filename/*/*/*.mcap"
     done
 
     cd "$cwd"
