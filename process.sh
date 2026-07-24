@@ -89,23 +89,6 @@ touch pointcloud_map/c.pcd
 #---------------------------------------------MOVE FILES TO APPROPRIATE LOCATION---------------------------------------------
 
 
-
-
-# mkdir: cannot create directory ‘pointcloud_map/’: File exists
-# Printing slash slices...
-# 2026-07-23
-# 92
-# 92_RAW_1784823750
-
-# Printing underscore slices...
-
-
-# output_dir = /home/lidar/Documents/Data/2026-07-23/92/92_RAW-SLAM_
-# Map saved to /home/lidar/Documents/Data/2026-07-23/92/92_RAW-SLAM_
-# ./process.sh: line 200: /home/lidar/Documents/GitHub/SLAM_testing/tools/g2o-to-poly.py: No such file or directory
-# ./process.sh: line 203: /home/lidar/Documents/GitHub/SLAM_testing/tools/pcd-to-colored-ply.py: No such file or directory
-# lidar@Abraham-PC:~/Documents/GitHub/ingenium_cartographer$ [INFO] [rviz2-4]: process has finished cleanly [pid 1580]
-
 #AB Slice the path meticulously into little blocks                        # /home/lidar/Documents/Data/2026-07-23/92/92_RAW_1784823750_0.mcap
 IFS='/' read -ra slash_sliced <<< "$input_file"
 # echo "Printing slash slices..."
@@ -122,14 +105,14 @@ base_mcap_name="${slash_sliced[8]}"                                       # 92_R
 # echo $mcap_savedir_name
 # echo $base_file_name
 
-echo "Printing underscore slices..."
+# echo "Printing underscore slices..."
 IFS='_' read -ra underscore_sliced <<< "$base_mcap_name"
-echo "${underscore_sliced[0]}"                                            # 92
+# echo "${underscore_sliced[0]}"                                            # 92
 processing_stage="${underscore_sliced[1]}"                                # RAW
 timestamp="${underscore_sliced[2]}"                                       # 1784823750
-echo $processing_stage
-echo $timestamp
-echo "${underscore_sliced[3]}"                                            # 0.mcap
+# echo $processing_stage
+# echo $timestamp
+# echo "${underscore_sliced[3]}"                                            # 0.mcap
 
 
 # output_dir = /home/lidar/Documents/Data/2026-07-23/92/92_RAW-SLAM_
@@ -138,9 +121,9 @@ echo "output_dir = $output_dir"
 mkdir "$output_dir"
 
 mv map.pcd "${output_dir}/${grid_id}_RAW-SLAM_${timestamp}.pcd"
-mv map_projector_info.yaml "${output_dir}/${grid_id}_RAW-SLAM_${timestamp}_map_projector_info.yaml"
-mv pose_graph.g2o "${output_dir}/${grid_id}_RAW-SLAM_${timestamp}_pose_graph.g2o"
-mv pointcloud_map/ "${output_dir}/${grid_id}_RAW-SLAM_${timestamp}_pointcloud_map/"
+mv map_projector_info.yaml "${output_dir}/${grid_id}_${timestamp}_map_projector_info.yaml"
+mv pose_graph.g2o "${output_dir}/${grid_id}_${timestamp}_pose_graph.g2o"
+mv pointcloud_map/ "${output_dir}/${grid_id}_${timestamp}_pointcloud_map/"
 
 echo "Map saved to ${output_dir}"
 
@@ -173,3 +156,5 @@ fi
 
 #AB Convert the pcd file to a ply file of different color than the previous two
 ~/Documents/GitHub/SLAM_testing/tools/pcd-to-colored-ply.py "$output_dir"/map.pcd "$new_color"
+
+sleep 1 # Delay the end of the program to give rviz etc. time to stop printing error messages over the cursor
