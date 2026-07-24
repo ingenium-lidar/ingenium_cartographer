@@ -47,6 +47,7 @@ ros2 run robot_state_publisher robot_state_publisher cartographer_config/lidar_r
 ros2 launch lidarslam lidarslam.launch.py main_param_dir:=cartographer_config/lidarslam_ingenium.yaml &
 
 
+
 #---------------------------------------------REMAP AND TRANSLATE TOPICS---------------------------------------------
 
 
@@ -62,6 +63,7 @@ ros2 run topic_tools relay /gx5/imu/data /imu &
 
 
 #---------------------------------------------PLAY DATA AND SAVE MAP---------------------------------------------
+
 
 ros2 bag play "$input_file"
 
@@ -87,13 +89,43 @@ touch pointcloud_map/c.pcd
 #---------------------------------------------MOVE FILES TO APPROPRIATE LOCATION---------------------------------------------
 
 
+# Printing slash slices...
+# home
+# lidar
+# Documents
+# Data
+# 2026-07-23
+# 92
+# 92_RAW_1784823750
+# 92_RAW_1784823750_0.mcap
+# Printing underscore slices...
+# RAW
+# 1784823750
+# 0.mcap
+
+# output_dir = /home/lidar/Documents/Data/92/92_RAW_1784823750/92_RAW_1784823750_RAW-SLAM_0.mcap
+# mkdir: cannot create directory ‘/home/lidar/Documents/Data/92/92_RAW_1784823750/92_RAW_1784823750_RAW-SLAM_0.mcap’: No such file or directory
+# mv: cannot move 'map.pcd' to '/home/lidar/Documents/Data/92/92_RAW_1784823750/92_RAW_1784823750_RAW-SLAM_0.mcap/92_RAW_1784823750_RAW-SLAM_0.mcap.pcd': No such file or directory
+# mv: cannot move 'map_projector_info.yaml' to '/home/lidar/Documents/Data/92/92_RAW_1784823750/92_RAW_1784823750_RAW-SLAM_0.mcap/92_RAW_1784823750_RAW-SLAM_0.mcap_map_projector_info.yaml': No such file or directory
+# mv: cannot move 'pose_graph.g2o' to '/home/lidar/Documents/Data/92/92_RAW_1784823750/92_RAW_1784823750_RAW-SLAM_0.mcap/92_RAW_1784823750_RAW-SLAM_0.mcap_pose_graph.g2o': No such file or directory
+# mv: cannot move 'pointcloud_map/' to '/home/lidar/Documents/Data/92/92_RAW_1784823750/92_RAW_1784823750_RAW-SLAM_0.mcap/92_RAW_1784823750_RAW-SLAM_0.mcap_pointcloud_map/': No such file or directory
+# Map saved to /home/lidar/Documents/Data/92/92_RAW_1784823750/92_RAW_1784823750_RAW-SLAM_0.mcap
+# ./process.sh: line 152: /home/lidar/Documents/GitHub/SLAM_testing/tools/g2o-to-poly.py: No such file or directory
+# ./process.sh: line 155: /home/lidar/Documents/GitHub/SLAM_testing/tools/pcd-to-colored-ply.py: No such file or directory
+
+
+
+
+
+
+
 #AB Slice the path meticulously into little blocks                        # /home/lidar/Documents/Data/2026-07-23/92/92_RAW_1784823750_0.mcap
 IFS='/' read -ra slash_sliced <<< "$input_file"
 echo "Printing slash slices..."
 echo "${slash_sliced[1]}"                                                 # home
-echo "${slash_sliced[2]}"                                 # lidar
-echo "${slash_sliced[3]}"                                   # Documents
-echo "${slash_sliced[4]}"                                   # Data
+echo "${slash_sliced[2]}"                                                 # lidar
+echo "${slash_sliced[3]}"                                                 # Documents
+echo "${slash_sliced[4]}"                                                 # Data
 echo "${slash_sliced[5]}" 
 daystamp="${slash_sliced[6]}"                                             # 2026-07-23     / Data
 grid_id="${slash_sliced[7]}"                                              # 92  
@@ -104,12 +136,12 @@ echo $base_file_name
 
 echo "Printing underscore slices..."
 IFS='_' read -ra underscore_sliced <<< "$base_file_name"
-echo "${underscore_sliced[1]}"                                # 92
+echo "${underscore_sliced[1]}"                                            # 92
 processing_stage="${underscore_sliced[2]}"                                # RAW
 timestamp="${underscore_sliced[3]}"                                       # 1784823750
 echo $processing_stage
 echo $timestamp
-echo "${underscore_sliced[4]}"                                # 0.mcap
+echo "${underscore_sliced[4]}"                                            # 0.mcap
 
 # output_dir = /home/lidar/Documents/Data/Data/2026-07-23/2026-07-23_RAW-SLAM_
 
