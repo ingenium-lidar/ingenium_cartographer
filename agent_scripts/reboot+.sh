@@ -31,6 +31,7 @@ cat << EOF > "$helper_script"
 #AB Delete the reboot+ helper script and the cron file that booted it
 rm -f "$helper_script"
 rm -f "$post_reboot_cron_file"
+rm -f /home/lidar/.imminent_reboot_warning
 
 #AB Run the post-reboot script with all other args appended
 "$post_reboot_script" $quoted_args >> "$log_file" 2>&1
@@ -38,6 +39,13 @@ rm -f "$post_reboot_cron_file"
 EOF
 
 echo "reboot+ has completed successfully, and $post_reboot_script will run upon reboot!"
+
+
+cat << EOF > $HOME/.imminent_reboot_warning
+echo -e "\033[0;31m ATTENTION! reboot+.sh is running in the background!"
+echo -e " If you arrived here after running an installer script, your computer will reboot suddenly a second time in the very near future! \033[0m"
+EOF
+
 
 #AB Reboot immediately unless the user cancels. If the user cancels, the script passed to reboot+ will run after the next reboot. 
 echo "The system will now reboot! Press any key to cancel..."
