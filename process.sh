@@ -75,14 +75,16 @@ ros2 service call /map_save std_srvs/Empty
 
 
 
-# FUZZ CODE FOR TESTING PURPOSES
-touch map.pcd
-touch map_projector_info.yaml
-touch pose_graph.g2o
-mkdir pointcloud_map/
-touch pointcloud_map/a.pcd
-touch pointcloud_map/b.pcd
-touch pointcloud_map/c.pcd
+# # FUZZ CODE FOR TESTING PURPOSES
+# #AB This code block creates empty files with names identical to the ones produced by the SLAM 
+# #   Note that the a.pcd/b.pcd etc. files are numbered in actual SLAM output. 
+# touch map.pcd
+# touch map_projector_info.yaml
+# touch pose_graph.g2o
+# mkdir pointcloud_map/
+# touch pointcloud_map/a.pcd
+# touch pointcloud_map/b.pcd
+# touch pointcloud_map/c.pcd
 
 
 
@@ -91,41 +93,28 @@ touch pointcloud_map/c.pcd
 
 #AB Slice the path meticulously into little blocks                        # /home/lidar/Documents/Data/2026-07-23/92/92_RAW_1784823750_0.mcap
 IFS='/' read -ra slash_sliced <<< "$input_file"
-# echo "Printing slash slices..."
-# echo "${slash_sliced[1]}" > /dev/null                                     # home
-# echo "${slash_sliced[2]}" > /dev/null                                     # lidar
-# echo "${slash_sliced[3]}" > /dev/null                                     # Documents
-# echo "${slash_sliced[4]}" > /dev/null                                     # Data
 daystamp="${slash_sliced[5]}"                                             # 2026-07-23
 grid_id="${slash_sliced[6]}"                                              # 92
 mcap_savedir_name="${slash_sliced[7]}"                                    # 92_RAW_1784823750  
 base_mcap_name="${slash_sliced[8]}"                                       # 92_RAW_1784823750_0.mcap
-# echo $daystamp
-# echo $grid_id
-# echo $mcap_savedir_name
-# echo $base_file_name
 
-# echo "Printing underscore slices..."
 IFS='_' read -ra underscore_sliced <<< "$base_mcap_name"
-# echo "${underscore_sliced[0]}"                                            # 92
 processing_stage="${underscore_sliced[1]}"                                # RAW
 timestamp="${underscore_sliced[2]}"                                       # 1784823750
-# echo $processing_stage
-# echo $timestamp
-# echo "${underscore_sliced[3]}"                                            # 0.mcap
 
 
-# output_dir = /home/lidar/Documents/Data/2026-07-23/92/92_RAW-SLAM_
+#AB Assemble the appropriate output path from the sliced pieces
 output_dir="${HOME}/Documents/Data/${daystamp}/${grid_id}/${grid_id}_RAW-SLAM_${timestamp}"
-echo "output_dir = $output_dir"
 mkdir "$output_dir"
 
+#AB Move all files created by SLAM to the appropriate locations, renaming them as necessary
 mv map.pcd "${output_dir}/${grid_id}_RAW-SLAM_${timestamp}.pcd"
 mv map_projector_info.yaml "${output_dir}/${grid_id}_${timestamp}_map_projector_info.yaml"
 mv pose_graph.g2o "${output_dir}/${grid_id}_${timestamp}_pose_graph.g2o"
 mv pointcloud_map/ "${output_dir}/${grid_id}_${timestamp}_pointcloud_map/"
 
 echo "Map saved to ${output_dir}"
+sleep 1 # Delay the end of the program to give rviz etc. time to stop printing error messages over the cursor
 
 
 
@@ -156,5 +145,3 @@ fi
 
 #AB Convert the pcd file to a ply file of different color than the previous two
 ~/Documents/GitHub/SLAM_testing/tools/pcd-to-colored-ply.py "$output_dir"/map.pcd "$new_color"
-
-sleep 1 # Delay the end of the program to give rviz etc. time to stop printing error messages over the cursor
