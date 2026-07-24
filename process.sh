@@ -75,16 +75,16 @@ ros2 service call /map_save std_srvs/Empty
 
 
 
-# # FUZZ CODE FOR TESTING PURPOSES
-# #AB This code block creates empty files with names identical to the ones produced by the SLAM 
-# #   Note that the a.pcd/b.pcd etc. files are numbered in actual SLAM output. 
-# touch map.pcd
-# touch map_projector_info.yaml
-# touch pose_graph.g2o
-# mkdir pointcloud_map/
-# touch pointcloud_map/a.pcd
-# touch pointcloud_map/b.pcd
-# touch pointcloud_map/c.pcd
+# FUZZ CODE FOR TESTING PURPOSES
+#AB This code block creates empty files with names identical to the ones produced by the SLAM 
+#   Note that the a.pcd/b.pcd etc. files are numbered in actual SLAM output. 
+touch map.pcd
+touch map_projector_info.yaml
+touch pose_graph.g2o
+mkdir pointcloud_map/
+touch pointcloud_map/a.pcd
+touch pointcloud_map/b.pcd
+touch pointcloud_map/c.pcd
 
 
 
