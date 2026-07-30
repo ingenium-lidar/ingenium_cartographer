@@ -31,6 +31,7 @@ scan_matcher:
     odom_prior_suspect_recovery_only: false
     odom_prior_weight: 1.0
     debug_flag: false
+    use_sim_time: true
 
 graph_based_slam:
     ros__parameters:
@@ -66,3 +67,4 @@ graph_based_slam:
       dynamic_object_filter_temporal_window: 5
       dynamic_object_filter_max_range_from_sensor_m: 30.0
       debug_flag: true
+      use_sim_time: true
