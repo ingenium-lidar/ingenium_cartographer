@@ -60,7 +60,7 @@ source ~/Apps/lidar_slam_ros2/ros2_ws/install/setup.bash
 ros2 run robot_state_publisher robot_state_publisher cartographer_config/lidar_robot.urdf &
 
 #AB Launch the SLAM node
-ros2 launch lidarslam lidarslam.launch.py main_param_dir:=cartographer_config/lidarslam_ingenium.yaml &
+ros2 launch lidarslam lidarslam.launch.py main_param_dir:=cartographer_config/lidarslam_ingenium.yaml -p use_sim_time:=true &
 
 
 
@@ -68,20 +68,20 @@ ros2 launch lidarslam lidarslam.launch.py main_param_dir:=cartographer_config/li
 
 
 #AB Launch the node to remap /velodyne_packets (proprietary format) to /velodyne_points (of type sensor_msgs/msg/PointCloud2)
-ros2 launch /opt/ros/jazzy/share/velodyne_pointcloud/launch/velodyne_transform_node-VLP32C-launch.py & 
+ros2 launch /opt/ros/jazzy/share/velodyne_pointcloud/launch/velodyne_transform_node-VLP32C-launch.py -p use_sim_time:=true & 
 
 #AB Pass the packets published on /velodyne_points by the transform node to the /input_cloud topic read by the SLAM node. 
-ros2 run topic_tools relay /velodyne_points /points_raw --ros-args --remap __node:=lidar_relay_node & 
+ros2 run topic_tools relay /velodyne_points /points_raw --ros-args --remap __node:=lidar_relay_node -p use_sim_time:=true & 
 
 #AB Rename the IMU topic to match what the SLAM node expects.  
-ros2 run topic_tools relay /gx5/imu/data /imu --ros-args --remap __node:=imu_relay_node & 
+ros2 run topic_tools relay /gx5/imu/data /imu --ros-args --remap __node:=imu_relay_node -p use_sim_time:=true & 
 
 
 
 #---------------------------------------------PLAY DATA AND SAVE MAP---------------------------------------------
 
 
-ros2 bag play "$input_file"
+ros2 bag play "$input_file" --clock --rate 0.5 #AB --clock makes it publish its recorded time, which is important for accelerated/delayed playback.
 
 echo "Bag fully processed, press any key to exit"
 read -r
