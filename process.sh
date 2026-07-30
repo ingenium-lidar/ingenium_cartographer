@@ -57,15 +57,20 @@ source ~/Apps/lidar_slam_ros2/ros2_ws/install/setup.bash
 #AB Publish the relevant transforms from the urdf file
 # TODO: [WARN] [1783512779.897357455] [robot_state_publisher]: No robot_description parameter, but command-line argument available.  Assuming argument is name of URDF file.  This backwards compatibility fallback will be removed in the future.
 # TODO: try ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(cat cartographer_config/lidar_robot.urdf)"
+echo "Publishing robot state..."
 ros2 run robot_state_publisher robot_state_publisher cartographer_config/lidar_robot.urdf &
+sleep 1
 
 #AB Launch the SLAM node
+echo "Launching SLAM..."
 ros2 launch lidarslam lidarslam.launch.py main_param_dir:=cartographer_config/lidarslam_ingenium.yaml &
-
+sleep 1
 
 
 #---------------------------------------------REMAP AND TRANSLATE TOPICS---------------------------------------------
 
+
+echo "Launching transform and converter nodes..."
 
 #AB Launch the node to remap /velodyne_packets (proprietary format) to /velodyne_points (of type sensor_msgs/msg/PointCloud2)
 ros2 launch /opt/ros/jazzy/share/velodyne_pointcloud/launch/velodyne_transform_node-VLP32C-launch.py -p use_sim_time:=true & 
@@ -81,7 +86,9 @@ ros2 run topic_tools relay /gx5/imu/data /imu --ros-args --remap __node:=imu_rel
 #---------------------------------------------PLAY DATA AND SAVE MAP---------------------------------------------
 
 
-ros2 bag play "$input_file" --clock --rate 0.5 #AB --clock makes it publish its recorded time, which is important for accelerated/delayed playback.
+sleep 2 #AB Let everything settle before trying to play the bag
+echo "Playing back recorded data..."
+ros2 bag play "$input_file" --clock --rate 0.75 #AB --clock makes it publish its recorded time, which is important for accelerated/delayed playback.
 
 echo "Bag fully processed, press any key to exit"
 read -r
