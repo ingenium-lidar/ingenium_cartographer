@@ -41,6 +41,10 @@ fi
 #---------------------------------------------SOURCE RELEVANT PACKAGES---------------------------------------------
 
 
+#AB Temporary code--not DFS-compliant, since helper_scripts isn't automatically cloned. I have chosen not to include roskill.sh in ingenium_cartographer because it isn't our code--we copied it off the internet--and so we don't have a clear license to use it.
+source /home/lidar/Documents/GitHub/helper_scripts/roskill.sh
+sleep 2
+
 source /opt/ros/jazzy/setup.bash
 source ~/Apps/ndt_omp_ros2/ros2_ws/install/setup.bash
 source ~/Apps/lidar_slam_ros2/ros2_ws/install/setup.bash
