@@ -30,7 +30,7 @@ scan_matcher:
     odom_prior_translation_only: false
     odom_prior_suspect_recovery_only: false
     odom_prior_weight: 1.0
-    debug_flag: false
+    debug_flag: true
     use_sim_time: true
 
 graph_based_slam:
