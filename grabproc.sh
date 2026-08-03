@@ -407,3 +407,36 @@ function main(){
 
 
 main "$@"
+
+
+
+
+
+
+#AB The code below is an archival reference to the first-ever draft of grabproc.sh, which was also my first-ever Bash script. 
+#   I wrote it for the ROS1 system when I was a Freshman! It seems fitting that, as I retire from LiDAR and leave this final 
+#   draft of grabproc--my most complex Bash script yet--behind me, that I should also leave behind this tiny reference as a 
+#   record of where I started. I hope this gives hope to people just starting out at the LiDAR team!
+#   -Abraham
+
+
+
+
+# #!/bin/bash
+
+# echo "running" $0
+# echo "Version: Alpha"
+# echo "Author: Abraham Baker"
+# echo "Purpose: Automatically grab the passed bag file from the LiDAR RPi, copy it over to the LiDAR Omen, and process it."
+# echo " "
+
+# echo "Copying data from RPi: You will be prompted for its password before you can continue."
+# scp ubuntu@10.42.0.1:/home/ubuntu/ingenium_cartographer/$1 /home/lidar/ingenium_cartographer
+
+# echo "Navigating to home/lidar/ingenium_cartographer"
+# cd home/lidar/ingenium_cartographer
+
+# echo "processing bag"
+# ./process_bag.sh home/lidar/ingenium_cartographer/$1
+
+# echo "\nPROCESS HAS TERMINATED. grabproc.sh HAS FINISHED RUNNING."
