@@ -1,44 +1,91 @@
 #!/bin/bash
 
-#AB ROS Jazzy Installation Script, copied from https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
+#AB ROS Jazzy Installation Script, adapted from https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
 #AB to use ROS in a given terminal session, run source /opt/ros/jazzy/setup.bash
+
+VERBOSITY=$1
+FORCE=$2
+apt_flags=(); [[ "$FORCE" == "1" ]] && apt_flags+=("-y"); [[ "$VERBOSITY" == "0" ]] && apt_flags+=("-qq")
+
+
+function verbose_echo() {
+ if [[ "$VERBOSITY" == "2" ]]; then
+    echo "$@"
+ fi
+}
+
+
 cwd=$(pwd)
+NC='\033[0m' #AB format echo text as "no color"
+LIME='\e[38;5;82m' #AB format echo text as bright green
+verbose_echo -e "$LIME *^* Start of Install_Jazzy.sh$NC "
 
-echo "Updating apt..."
-sleep 1
-sudo apt update
-sudo apt upgrade
-sudo apt autoremove
 
-echo "Installing universe repository..."
-sleep 1
-sudo apt install -y software-properties-common
-sudo add-apt-repository universe
 
-echo "Configuring system..."
+#---------------------------------------------INSTALL ROS JAZZY---------------------------------------------
+
+verbose_echo "Updating apt..."
 sleep 1
-sudo apt update && sudo apt install -y curl
+sudo apt-get update "${apt_flags[@]}"
+sudo apt-get upgrade "${apt_flags[@]}"
+sudo apt-get autoremove "${apt_flags[@]}"
+
+verbose_echo "Installing universe repository..."
+sleep 1
+sudo apt-get install "${apt_flags[@]}" software-properties-common
+# notify-send "Install_Jazzy.sh: User confirmation required to add universe repository to apt!"
+sudo add-apt-repository universe -y #AB This line still prompts for user input. Put a notify-send here
+
+verbose_echo "Configuring system..."
+sleep 1
+sudo apt-get update # && sudo apt install -y curl #AB Moved to DAI 2026-07-17
 export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F\" '{print $4}')
-curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo $UBUNTU_CODENAME)_all.deb" # If using Ubuntu derivates use $UBUNTU_CODENAME
+curl --fail --retry 5 --retry-delay 5 --retry-all-errors --location -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo $UBUNTU_CODENAME)_all.deb" # If using Ubuntu derivates use $UBUNTU_CODENAME
 sudo dpkg -i /tmp/ros2-apt-source.deb
 
-echo "Updating apt a second time..."
+verbose_echo "Updating apt a second time..."
 sleep 1
-sudo apt update
-sudo apt upgrade
+sudo apt-get update "${apt_flags[@]}"
+sudo apt-get upgrade "${apt_flags[@]}"
 
-echo "Installing ros-jazzy-desktop..."
+verbose_echo "Installing ros-jazzy-desktop..."
 sleep 1
-sudo apt install -y ros-jazzy-desktop
+sudo apt-get install "${apt_flags[@]}" ros-jazzy-desktop
 
-echo "Installing rosbag2..."
-sleep 1
-sudo apt-get install -y ros-jazzy-rosbag2 &
-echo "Installing colcon..."
-sleep 1
-sudo apt install -y colcon & #AB A build tool for ROS2
-
-echo "ROS2 Jazzy installation complete."
+verbose_echo "ROS2 Jazzy installation complete."
 sleep 1
 
 cd $cwd
+
+
+
+#---------------------------------------------INSTALL ROS-HOSTED APT PACKAGES---------------------------------------------
+
+
+verbose_echo -e "$LIME Updating and upgrading apt...$NC "
+sudo apt-get update "${apt_flags[@]}" && sudo apt-get upgrade "${apt_flags[@]}"
+sleep 1
+
+verbose_echo -e "$LIME Installing rosbag2...$NC"
+sleep 1
+sudo apt-get install "${apt_flags[@]}" ros-jazzy-rosbag2
+#AB Removed this 2026-07-17 because I think it duplicates python3-colcon-common-extensions
+# echo "Installing colcon..."
+# sleep 1
+# sudo apt install -y colcon & #AB A build tool for ROS2
+
+#AB We install these here and not above with the other apt installs because they require ROS Jazzy to be installed first
+verbose_echo -e "$LIME Installing hardware drivers...$NC "
+sudo apt-get install ros-jazzy-velodyne "${apt_flags[@]}" #AB Install the Velodyne driver. It's in a stack hosted (I believe) on the ROS website.
+sudo apt-get install ros-jazzy-microstrain-inertial-driver "${apt_flags[@]}" #AB Install the IMU driver. These drivers are now maintained as part of the built-in ROS package manager!
+sudo apt-get install ros-jazzy-topic-tools "${apt_flags[@]}" #AB Install a wonderful utility that allows relaying topics. Dependency of process.sh
+
+
+verbose_echo -e "$LIME Installing Colcon and rosdep...$NC "
+sudo apt-get install python3-colcon-common-extensions "${apt_flags[@]}" #AB Installs both colcon and common extensions for colcon, the ROS build tool.
+sudo apt-get install python3-rosdep "${apt_flags[@]}"                   #AB Install rosdep, a tool for managing dependencies in ROS
+sudo rosdep init #AB turn on rosdep
+rosdep update  #AB update rosdep
+
+verbose_echo -e "$LIME Finished installing ROS-dependent packages.$NC "
+verbose_echo -e "$LIME End of Install_Jazzy.sh *^*$NC"

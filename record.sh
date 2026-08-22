@@ -14,6 +14,12 @@ else
   read -r grid_id #AB Prompt the user to enter a grid ID, which will be used to name the recorded data bag files.
 fi
 
+#AB If there's an underscore in a Grid ID, exit with an invalid parameter error. This is here because of the underscore splitting later. 
+if [[ "$grid_id" == *"_"* ]]; then
+  echo -e "\033[0;31m\e[1m ERROR: Underscores are not allowed in the Grid ID! \033[0m" >&2 #AB Echo in red and bold
+  exit 2
+fi
+
 
 save_path=~/Documents/Data/$(date +%F)/"$grid_id"_RAW_$(date +%F_%H:%M)
 echo -e "\e[1;36mSaving file to $save_path\033[0m"

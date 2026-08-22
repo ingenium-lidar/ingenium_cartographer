@@ -12,3 +12,4 @@
 /.venv
 /cartographer_config/__pycache__
 /python_scripts/__pycache__
+/hello_world.sh

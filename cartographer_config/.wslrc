@@ -1,0 +1,13 @@
+#AB 
+# This file should be placed in ~ if and only if the user is on Windows Subsystem for Linux (WSL2)
+# 
+# Currently, the only function here is a notify-send function that--critically--overrides the one
+# that comes installed by default on Ubuntu. Sourcing this on a regular Ubuntu system will break
+# the notification system by replacing it with a function that references Windows components that
+# do not exist on Ubuntu. By contrast, sourcing this on a WSL system will make notify-send work!
+
+notify-send() {
+    local title="${1:-Notification}"
+    local msg="${2:-$1}"
+    powershell.exe -Command "[reflection.assembly]::loadwithpartialname('System.Windows.Forms'); [System.Windows.Forms.MessageBox]::Show('$msg', '$title')" > /dev/null 2>&1
+}

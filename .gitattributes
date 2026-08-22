@@ -1,0 +1,5 @@
+# Default: normalize everything to LF in the repo, convert to native on checkout only if needed
+* text=auto
+
+# Force LF specifically for scripts — never let these become CRLF, even on Windows checkouts
+*.sh text eol=lf
