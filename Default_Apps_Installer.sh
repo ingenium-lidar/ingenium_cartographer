@@ -163,9 +163,11 @@ sudo apt update && sudo apt upgrade -y
 sleep 1
 
 #AB We install these here and not above with the other apt installs because they require ROS Jazzy to be installed first
-echo -e "$LIME Installing hardware drivers...$NC "
+echo -e "$LIME Installing hardware drivers & topic tools...$NC "
 sudo apt install ros-jazzy-velodyne -y #AB Install the Velodyne driver. It's in a stack hosted (I believe) on the ROS website.
 sudo apt install ros-jazzy-microstrain-inertial-driver -y #AB Install the IMU driver. These drivers are now maintained as part of the built-in ROS package manager! 
+sudo apt install ros-jazzy-topic-tools
+
 
 
 
